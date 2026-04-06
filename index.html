@@ -55,6 +55,92 @@
     }
     .aura::before { top: -8rem; left: -8rem; }
     .aura::after { top: -6rem; right: -10rem; }
+    .cover-slide {
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+    }
+    .cover-slide::before,
+    .cover-slide::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      pointer-events: none;
+      z-index: 0;
+      filter: blur(100px);
+    }
+    .cover-slide::before {
+      width: 28rem;
+      height: 28rem;
+      left: 50%;
+      top: 48%;
+      transform: translate(-65%, -50%);
+      background: radial-gradient(circle, rgba(52,211,153,0.48) 0%, rgba(5,191,171,0.2) 38%, transparent 72%);
+    }
+    .cover-slide::after {
+      width: 24rem;
+      height: 24rem;
+      left: 54%;
+      top: 43%;
+      transform: translate(-20%, -50%);
+      background: radial-gradient(circle, rgba(74,220,208,0.28) 0%, rgba(52,211,153,0.16) 36%, transparent 72%);
+    }
+    .cover-inner {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .cover-brand {
+      font-family: 'Newsreader', serif;
+      font-style: italic;
+      font-size: clamp(58px, 9vw, 108px);
+      line-height: 0.95;
+      letter-spacing: -0.05em;
+      background: linear-gradient(180deg, #ffffff 0%, #ffffff 58%, #34D399 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      text-wrap: balance;
+      text-shadow: 0 0 42px rgba(52, 211, 153, 0.14);
+    }
+    .cover-kicker {
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.28em;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .cover-support {
+      max-width: 760px;
+      color: var(--muted);
+      font-size: clamp(18px, 2vw, 24px);
+      line-height: 1.5;
+    }
+    .qr-placeholder {
+      width: 180px;
+      height: 180px;
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)),
+        repeating-linear-gradient(0deg, rgba(255,255,255,0.07) 0px, rgba(255,255,255,0.07) 10px, transparent 10px, transparent 20px),
+        repeating-linear-gradient(90deg, rgba(255,255,255,0.07) 0px, rgba(255,255,255,0.07) 10px, transparent 10px, transparent 20px);
+      box-shadow: 0 0 40px rgba(52,211,153,0.14);
+      display: grid;
+      place-items: center;
+      color: rgba(255,255,255,0.72);
+      font-size: 14px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
 
     .deck {
       position: relative;
@@ -231,11 +317,11 @@
   </div>
 
   <div class="deck">
-    <section class="slide active">
-      <div>
-        <div class="eyebrow">Ventura Marketing Training</div>
-        <h1><span class="highlight">YouTube + Meta</span><br/>Growth Systems</h1>
-        <p class="subtext">Led by <strong>Shayan Samimi</strong> — MBC Marketing Alum. A simple talking deck built to support live delivery, not compete with it.</p>
+    <section class="slide active cover-slide">
+      <div class="cover-inner">
+        <div class="cover-kicker">Ventura Marketing Training</div>
+        <div class="cover-brand">Ventura Marketing</div>
+        <p class="cover-support">MBC Marketing Alum <strong>Shayan Samimi</strong> — YouTube content strategy, repurposing systems, and Meta ads after Andromeda.</p>
       </div>
       <div class="meta">
         <div>Ventura Marketing</div>
@@ -325,9 +411,13 @@
 
     <section class="slide">
       <div>
-        <div class="eyebrow">Closing</div>
-        <h2>Questions + discussion.</h2>
-        <p class="subtext">Use this as a live conversation. The slides are here to anchor the room, not carry the whole presentation for you.</p>
+        <div class="eyebrow">Internship Opportunity</div>
+        <h2>Internship Group Interview</h2>
+        <p class="subtext">If you want to be considered, scan the code below and join the next step. Placeholder for now — we can swap in the real QR when you have the destination link.</p>
+        <div style="margin-top: 34px; display: flex; flex-direction: column; align-items: flex-start; gap: 18px;">
+          <div class="qr-placeholder">QR</div>
+          <div style="color: #a1a1aa; font-size: 15px; letter-spacing: 0.08em; text-transform: uppercase;">Scan to apply / join interview</div>
+        </div>
       </div>
       <div class="meta"><div>Ventura Marketing</div><div class="progress"></div></div>
     </section>
