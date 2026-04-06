@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ventura Training Deck</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #000000;
+      --card: rgba(24, 24, 27, 0.42);
+      --border: rgba(255,255,255,0.1);
+      --text: #f8fafc;
+      --muted: #a1a1aa;
+      --accent: #34D399;
+      --accent-2: #05BFAB;
+      --accent-3: #4adcd0;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Geist', system-ui, sans-serif;
+    }
+    body {
+      position: relative;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(52,211,153,0.18), transparent 26%),
+        radial-gradient(circle at 88% 20%, rgba(5,191,171,0.15), transparent 24%),
+        linear-gradient(180deg, #020617 0%, #000000 40%, #000000 100%);
+    }
+    .aura {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .aura::before,
+    .aura::after {
+      content: "";
+      position: absolute;
+      width: 32rem;
+      height: 32rem;
+      border-radius: 999px;
+      filter: blur(100px);
+      opacity: 0.3;
+      background: radial-gradient(circle, rgba(52,211,153,0.9) 0%, rgba(5,191,171,0.35) 38%, transparent 72%);
+    }
+    .aura::before { top: -8rem; left: -8rem; }
+    .aura::after { top: -6rem; right: -10rem; }
+
+    .deck {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      padding: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .slide {
+      position: absolute;
+      width: min(1200px, calc(100vw - 64px));
+      height: min(760px, calc(100vh - 64px));
+      padding: 56px;
+      border-radius: 32px;
+      border: 1px solid var(--border);
+      background: linear-gradient(180deg, rgba(24,24,27,0.56), rgba(9,9,11,0.72));
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.45);
+      opacity: 0;
+      transform: translateY(28px) scale(0.985);
+      pointer-events: none;
+      transition: opacity 0.45s ease, transform 0.45s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .slide.active {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+    .eyebrow {
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.24em;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 18px;
+    }
+    h1, h2 {
+      font-family: 'Newsreader', serif;
+      font-style: italic;
+      line-height: 0.95;
+      margin: 0;
+      letter-spacing: -0.04em;
+    }
+    h1 { font-size: clamp(56px, 8vw, 106px); max-width: 900px; }
+    h2 { font-size: clamp(40px, 6vw, 72px); max-width: 860px; }
+    .highlight {
+      background: linear-gradient(135deg, var(--accent), var(--accent-3));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .subtext {
+      font-size: clamp(18px, 2vw, 24px);
+      line-height: 1.55;
+      color: var(--muted);
+      max-width: 760px;
+    }
+    .bullets {
+      display: grid;
+      gap: 18px;
+      margin-top: 28px;
+      max-width: 820px;
+    }
+    .bullet {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      padding: 18px 20px;
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.03);
+    }
+    .bullet-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: var(--accent);
+      margin-top: 8px;
+      flex: 0 0 auto;
+      box-shadow: 0 0 16px rgba(52,211,153,0.55);
+    }
+    .bullet p {
+      margin: 0;
+      font-size: clamp(18px, 2vw, 24px);
+      line-height: 1.45;
+      color: #f4f4f5;
+    }
+    .meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      color: #71717a;
+      font-size: 14px;
+    }
+    .progress {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.14);
+      transition: transform 0.3s ease, background 0.3s ease;
+    }
+    .dot.active {
+      background: linear-gradient(135deg, var(--accent), var(--accent-3));
+      transform: scale(1.25);
+    }
+    .nav-zone {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      width: 20vw;
+      z-index: 20;
+    }
+    .nav-zone.left { left: 0; cursor: w-resize; }
+    .nav-zone.right { right: 0; cursor: e-resize; }
+    .side-hint {
+      position: fixed;
+      right: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 25;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      color: rgba(255,255,255,0.45);
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+    .side-arrow {
+      width: 46px;
+      height: 46px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(12px);
+      font-size: 20px;
+    }
+    @media (max-width: 900px) {
+      .deck { padding: 18px; }
+      .slide {
+        width: calc(100vw - 24px);
+        height: calc(100vh - 24px);
+        padding: 28px;
+        border-radius: 24px;
+      }
+      .bullet p, .subtext { font-size: 17px; }
+      .nav-zone { width: 24vw; }
+      .side-hint { right: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="aura"></div>
+  <div class="nav-zone left" onclick="prevSlide()"></div>
+  <div class="nav-zone right" onclick="nextSlide()"></div>
+  <div class="side-hint">
+    <div class="side-arrow">→</div>
+    <div>Next</div>
+  </div>
+
+  <div class="deck">
+    <section class="slide active">
+      <div>
+        <div class="eyebrow">Ventura Marketing Training</div>
+        <h1><span class="highlight">YouTube + Meta</span><br/>Growth Systems</h1>
+        <p class="subtext">Led by <strong>Shayan Samimi</strong> — MBC Marketing Alum. A simple talking deck built to support live delivery, not compete with it.</p>
+      </div>
+      <div class="meta">
+        <div>Ventura Marketing</div>
+        <div class="progress"></div>
+      </div>
+    </section>
+
+    <section class="slide">
+      <div>
+        <div class="eyebrow">Today’s Focus</div>
+        <h2>What we’re covering.</h2>
+        <div class="bullets">
+          <div class="bullet"><div class="bullet-dot"></div><p>YouTube content strategy as the trust-building engine</p></div>
+          <div class="bullet"><div class="bullet-dot"></div><p>Repurposing long-form into Shorts for discoverability</p></div>
+          <div class="bullet"><div class="bullet-dot"></div><p>Meta ads strategy after the Andromeda update</p></div>
+          <div class="bullet"><div class="bullet-dot"></div><p>Why content-first creative is outperforming hard-sell ads</p></div>
+        </div>
+      </div>
+      <div class="meta"><div>Agenda</div><div class="progress"></div></div>
+    </section>
+
+    <section class="slide">
+      <div>
+        <div class="eyebrow">YouTube Strategy</div>
+        <h2>Long-form is the real asset.</h2>
+        <div class="bullets">
+          <div class="bullet"><div class="bullet-dot"></div><p>Long-form builds trust in a way short clips can’t</p></div>
+          <div class="bullet"><div class="bullet-dot"></div><p>It positions clients as real authorities over time</p></div>
+          <div class="bullet"><div class="bullet-dot"></div><p>It creates a content engine we can slice into multiple assets</p></div>
+        </div>
+      </div>
+      <div class="meta"><div>Slide 3</div><div class="progress"></div></div>
+    </section>
+
+    <section class="slide">
+      <div>
+        <div class="eyebrow">Repurposing</div>
+        <h2>Shorts drive reach. Long-form drives depth.</h2>
+        <div class="bullets">
+          <div class="bullet"><div class="bullet-dot"></div><p>We repurpose long videos into Shorts to expand discoverability</p></div>
+          <div class="bullet"><div class="bullet-dot"></div><p>Shorts are audience growth tools, not the whole strategy</p></div>
+          <div class="bullet"><div class="bullet-dot"></div><p>The long-form library is what keeps viewers coming back</p></div>
+        </div>
+      </div>
+      <div class="meta"><div>Slide 4</div><div class="progress"></div></div>
+    </section>
+
+    <section class="slide">
+      <div>
+        <div class="eyebrow">Meta Ads Post-Andromeda</div>
+        <h2>Broad targeting. Better creative. Less over-control.</h2>
+        <div class="bullets">
+          <div class="bullet"><div class="bullet-dot"></div><p>We’ve adapted to Meta’s Andromeda update by leaning broader</p></div>
+          <div class="bullet"><div class="bullet-dot"></div><p>We let the algorithm do more of the targeting work</p></div>
+          <div class="bullet"><div class="bullet-dot"></div><p>Strong creative is the lever that matters most</p></div>
+        </div>
+      </div>
+      <div class="meta"><div>Slide 5</div><div class="progress"></div></div>
+    </section>
+
+    <section class="slide">
+      <div>
+        <div class="eyebrow">Creative Direction</div>
+        <h2>Content-first ads are winning.</h2>
+        <div class="bullets">
+          <div class="bullet"><div class="bullet-dot"></div><p>Authentic creative is outperforming polished hard-sell formats</p></div>
+          <div class="bullet"><div class="bullet-dot"></div><p>The goal is to stop the scroll without feeling like an ad</p></div>
+          <div class="bullet"><div class="bullet-dot"></div><p>The best ads now feel closer to native content than traditional media buys</p></div>
+        </div>
+      </div>
+      <div class="meta"><div>Slide 6</div><div class="progress"></div></div>
+    </section>
+
+    <section class="slide">
+      <div>
+        <div class="eyebrow">Key Takeaways</div>
+        <h2>What matters most.</h2>
+        <div class="bullets">
+          <div class="bullet"><div class="bullet-dot"></div><p>YouTube long-form builds trust and authority</p></div>
+          <div class="bullet"><div class="bullet-dot"></div><p>Shorts amplify reach by repurposing the long-form core</p></div>
+          <div class="bullet"><div class="bullet-dot"></div><p>Meta rewards broad setups paired with better creative</p></div>
+          <div class="bullet"><div class="bullet-dot"></div><p>Authentic content-first creative is the new performance edge</p></div>
+        </div>
+      </div>
+      <div class="meta"><div>Summary</div><div class="progress"></div></div>
+    </section>
+
+    <section class="slide">
+      <div>
+        <div class="eyebrow">Closing</div>
+        <h2>Questions + discussion.</h2>
+        <p class="subtext">Use this as a live conversation. The slides are here to anchor the room, not carry the whole presentation for you.</p>
+      </div>
+      <div class="meta"><div>Ventura Marketing</div><div class="progress"></div></div>
+    </section>
+  </div>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    let current = 0;
+
+    function renderProgress() {
+      document.querySelectorAll('.progress').forEach((container) => {
+        container.innerHTML = slides.map((_, index) => `<span class="dot ${index === current ? 'active' : ''}"></span>`).join('');
+      });
+    }
+
+    function showSlide(index) {
+      current = Math.max(0, Math.min(index, slides.length - 1));
+      slides.forEach((slide, i) => slide.classList.toggle('active', i === current));
+      renderProgress();
+    }
+
+    function nextSlide() {
+      showSlide(current + 1);
+    }
+
+    function prevSlide() {
+      showSlide(current - 1);
+    }
+
+    window.nextSlide = nextSlide;
+    window.prevSlide = prevSlide;
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowRight' || event.key === ' ' || event.key === 'PageDown') nextSlide();
+      if (event.key === 'ArrowLeft' || event.key === 'PageUp') prevSlide();
+    });
+
+    renderProgress();
+  </script>
+</body>
+</html>
