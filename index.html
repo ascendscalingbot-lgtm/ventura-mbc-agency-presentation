@@ -141,6 +141,57 @@
       letter-spacing: 0.2em;
       text-transform: uppercase;
     }
+    .profile-slide {
+      justify-content: center;
+    }
+    .profile-layout {
+      display: grid;
+      grid-template-columns: 120px 4px 1fr;
+      gap: 26px;
+      align-items: center;
+      max-width: 960px;
+    }
+    .profile-image {
+      width: 120px;
+      height: 120px;
+      border-radius: 999px;
+      object-fit: cover;
+      border: 2px solid rgba(52,211,153,0.22);
+      box-shadow: 0 0 32px rgba(52,211,153,0.18);
+    }
+    .profile-line {
+      width: 4px;
+      height: 132px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(52,211,153,1) 0%, rgba(52,211,153,0) 100%);
+    }
+    .profile-role {
+      color: #71717a;
+      font-size: 14px;
+      margin-top: 8px;
+      margin-bottom: 18px;
+      letter-spacing: 0.02em;
+    }
+    .profile-copy {
+      color: #d4d4d8;
+      font-size: clamp(17px, 1.8vw, 22px);
+      line-height: 1.55;
+      max-width: 720px;
+    }
+    .title-only-slide {
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .title-only-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+      justify-content: center;
+    }
 
     .deck {
       position: relative;
@@ -329,6 +380,38 @@
       </div>
     </section>
 
+    <section class="slide profile-slide">
+      <div>
+        <div class="eyebrow">Ventura Leadership</div>
+        <div class="profile-layout">
+          <img src="https://ventura-website-ruddy.vercel.app/shawn-vierra-headshot.jpg" alt="Shawn Vierra" class="profile-image" />
+          <div class="profile-line"></div>
+          <div>
+            <h2>Shawn Vierra</h2>
+            <div class="profile-role">Founder & CEO, Ventura Marketing Collective</div>
+            <div class="profile-copy">Founder of Ventura Marketing Collective and the operator behind the authority-first philosophy driving the brand. Shawn leads from positioning, conviction, and premium market presence — with a focus on helping exceptional brands become the obvious choice in their category.</div>
+          </div>
+        </div>
+      </div>
+      <div class="meta"><div>Ventura Leadership</div><div class="progress"></div></div>
+    </section>
+
+    <section class="slide profile-slide">
+      <div>
+        <div class="eyebrow">Training Lead</div>
+        <div class="profile-layout">
+          <div style="width:120px;height:120px;border-radius:999px;border:2px solid rgba(52,211,153,0.22);display:grid;place-items:center;background:rgba(255,255,255,0.03);box-shadow:0 0 32px rgba(52,211,153,0.14);font-family:'Newsreader',serif;font-style:italic;font-size:42px;color:#34D399;">S</div>
+          <div class="profile-line"></div>
+          <div>
+            <h2>Shayan Samimi</h2>
+            <div class="profile-role">MBC Marketing Alum · Training Lead</div>
+            <div class="profile-copy">Shayan leads this training with a focus on modern attention, authority, and performance systems — especially YouTube content strategy, repurposing engines, Meta ads after Andromeda, and practical AI-driven marketing execution.</div>
+          </div>
+        </div>
+      </div>
+      <div class="meta"><div>Training Lead</div><div class="progress"></div></div>
+    </section>
+
     <section class="slide">
       <div>
         <div class="eyebrow">Today’s Focus</div>
@@ -407,6 +490,15 @@
         </div>
       </div>
       <div class="meta"><div>Summary</div><div class="progress"></div></div>
+    </section>
+
+    <section class="slide title-only-slide">
+      <div class="title-only-inner">
+        <div class="eyebrow">Next Topic</div>
+        <h2><span class="highlight">AI Agents</span></h2>
+        <p class="subtext">How we think about practical execution, leverage, and digital workers inside modern marketing operations.</p>
+      </div>
+      <div class="meta"><div>AI Agents</div><div class="progress"></div></div>
     </section>
 
     <section class="slide">
