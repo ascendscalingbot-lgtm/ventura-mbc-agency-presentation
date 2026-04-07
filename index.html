@@ -439,32 +439,6 @@
     }
     .nav-zone.left { left: 0; cursor: w-resize; }
     .nav-zone.right { right: 0; cursor: e-resize; }
-    .side-hint {
-      position: fixed;
-      right: 24px;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 25;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      color: rgba(255,255,255,0.45);
-      font-size: 12px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-    }
-    .side-arrow {
-      width: 46px;
-      height: 46px;
-      border-radius: 999px;
-      display: grid;
-      place-items: center;
-      border: 1px solid rgba(255,255,255,0.1);
-      background: rgba(255,255,255,0.04);
-      backdrop-filter: blur(12px);
-      font-size: 20px;
-    }
     @media (max-width: 900px) {
       .deck { padding: 18px; }
       .slide {
@@ -475,7 +449,6 @@
       }
       .bullet p, .subtext { font-size: 17px; }
       .nav-zone { width: 24vw; }
-      .side-hint { right: 12px; }
       .cover-speakers {
         grid-template-columns: 1fr;
       }
@@ -517,10 +490,6 @@
   <div class="aura"></div>
   <div class="nav-zone left" onclick="prevSlide()"></div>
   <div class="nav-zone right" onclick="nextSlide()"></div>
-  <div class="side-hint">
-    <div class="side-arrow">→</div>
-    <div>Next</div>
-  </div>
 
   <div class="deck">
     <section class="slide active cover-slide">
@@ -672,6 +641,20 @@
 
     <section class="slide">
       <div>
+        <div class="eyebrow">AI Agents</div>
+        <h2>Digital workers for modern agencies.</h2>
+        <div class="bullets">
+          <div class="bullet"><div class="bullet-dot"></div><p>AI agents help execute work, not just generate ideas</p></div>
+          <div class="bullet"><div class="bullet-dot"></div><p>They can handle research, writing, follow-up, organization, and repetitive ops</p></div>
+          <div class="bullet"><div class="bullet-dot"></div><p>The real advantage is speed, consistency, and leverage across the team</p></div>
+          <div class="bullet"><div class="bullet-dot"></div><p>Agencies that learn to deploy AI operators early will compound faster than everyone else</p></div>
+        </div>
+      </div>
+      <div class="meta"><div>AI Agents</div><div class="progress"></div></div>
+    </section>
+
+    <section class="slide">
+      <div>
         <div class="eyebrow">Key Takeaways</div>
         <h2>What matters most.</h2>
         <div class="bullets">
@@ -682,15 +665,6 @@
         </div>
       </div>
       <div class="meta"><div>Summary</div><div class="progress"></div></div>
-    </section>
-
-    <section class="slide title-only-slide">
-      <div class="title-only-inner">
-        <div class="eyebrow">Next Topic</div>
-        <h2><span class="highlight">AI Agents</span></h2>
-        <p class="subtext">How we think about practical execution, leverage, and digital workers inside modern marketing operations.</p>
-      </div>
-      <div class="meta"><div>AI Agents</div><div class="progress"></div></div>
     </section>
 
     <section class="slide">
