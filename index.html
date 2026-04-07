@@ -93,18 +93,20 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 16px;
+      gap: 18px;
       width: 100%;
       max-width: 980px;
       margin: 0 auto;
-      padding-top: 10px;
+      min-height: 100%;
+      padding: 24px 0 40px;
     }
     .cover-brand {
       font-family: 'Newsreader', serif;
       font-style: italic;
       font-size: clamp(58px, 9vw, 108px);
-      line-height: 0.95;
+      line-height: 1.02;
       letter-spacing: -0.05em;
+      padding-bottom: 10px;
       background: linear-gradient(180deg, #ffffff 0%, #ffffff 58%, #34D399 100%);
       -webkit-background-clip: text;
       background-clip: text;
@@ -216,6 +218,7 @@
       align-items: center;
       justify-content: center;
       gap: 28px;
+      text-align: center;
     }
     .profile-asset {
       display: grid;
@@ -341,6 +344,8 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      align-items: center;
+      text-align: center;
     }
     .slide.active {
       opacity: 1;
@@ -381,6 +386,9 @@
       gap: 18px;
       margin-top: 28px;
       max-width: 820px;
+      width: 100%;
+      margin-left: auto;
+      margin-right: auto;
     }
     .bullet {
       display: flex;
@@ -390,6 +398,7 @@
       border-radius: 22px;
       border: 1px solid rgba(255,255,255,0.08);
       background: rgba(255,255,255,0.03);
+      text-align: left;
     }
     .bullet-dot {
       width: 10px;
@@ -496,7 +505,6 @@
       <div class="cover-inner">
         <div class="cover-kicker">MBC Agency Training</div>
         <div class="cover-brand">Ventura Marketing</div>
-        <p class="cover-support">YouTube content strategy, repurposing systems, Meta ads after Andromeda, and practical modern growth thinking.</p>
         <div class="presented-by">Presented By</div>
         <div class="cover-speakers">
           <div class="cover-speaker-card">
@@ -512,7 +520,7 @@
             <div class="cover-speaker-line"></div>
             <div>
               <div class="cover-speaker-name">Shayan Samimi</div>
-              <div class="cover-speaker-role">MBC Marketing Alum · Training Lead</div>
+              <div class="cover-speaker-role">Cofounder, Ventura Marketing · MBC Agency Alum</div>
             </div>
           </div>
         </div>
@@ -565,8 +573,7 @@
           <div class="profile-line"></div>
           <div class="profile-name-block">
             <h2>Shayan Samimi</h2>
-            <div class="profile-role">MBC Marketing Alum · Training Lead</div>
-          </div>
+            <div class="profile-role">Cofounder, Ventura Marketing · MBC Agency Alum</div>          </div>
         </div>
         <div class="profile-copy">Shayan leads this training with a focus on modern attention, authority, and performance systems — especially YouTube content strategy, repurposing engines, Meta ads after Andromeda, and practical AI-driven marketing execution.</div>
       </div>
