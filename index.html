@@ -93,10 +93,11 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 24px;
+      gap: 16px;
       width: 100%;
-      max-width: 1100px;
+      max-width: 980px;
       margin: 0 auto;
+      padding-top: 10px;
     }
     .cover-brand {
       font-family: 'Newsreader', serif;
@@ -133,29 +134,30 @@
       font-weight: 600;
     }
     .cover-speakers {
-      margin-top: 8px;
+      margin-top: 6px;
       width: 100%;
+      max-width: 760px;
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 28px;
+      gap: 18px;
       align-items: stretch;
     }
     .cover-speaker-card {
       text-align: left;
       display: grid;
-      grid-template-columns: 92px 4px 1fr;
-      gap: 18px;
+      grid-template-columns: 64px 4px 1fr;
+      gap: 14px;
       align-items: center;
-      padding: 24px;
-      border-radius: 28px;
+      padding: 16px 18px;
+      border-radius: 22px;
       border: 1px solid rgba(255,255,255,0.08);
       background: rgba(255,255,255,0.03);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
     }
     .cover-speaker-image {
-      width: 92px;
-      height: 92px;
+      width: 64px;
+      height: 64px;
       border-radius: 999px;
       object-fit: cover;
       border: 2px solid rgba(52,211,153,0.22);
@@ -163,28 +165,25 @@
     }
     .cover-speaker-line {
       width: 4px;
-      height: 96px;
+      height: 64px;
       border-radius: 999px;
       background: linear-gradient(180deg, rgba(52,211,153,1) 0%, rgba(52,211,153,0) 100%);
     }
     .cover-speaker-name {
       font-family: 'Newsreader', serif;
       font-style: italic;
-      font-size: clamp(24px, 2.4vw, 34px);
+      font-size: clamp(20px, 2vw, 28px);
       color: #fff;
       line-height: 1;
-      margin-bottom: 8px;
+      margin-bottom: 4px;
     }
     .cover-speaker-role {
       color: #71717a;
-      font-size: 13px;
-      margin-bottom: 10px;
+      font-size: 12px;
       letter-spacing: 0.02em;
     }
     .cover-speaker-copy {
-      color: #d4d4d8;
-      font-size: 15px;
-      line-height: 1.5;
+      display: none;
     }
     .qr-placeholder {
       width: 180px;
@@ -421,15 +420,15 @@
         grid-template-columns: 1fr;
       }
       .cover-speaker-card {
-        grid-template-columns: 74px 4px 1fr;
-        padding: 18px;
+        grid-template-columns: 58px 4px 1fr;
+        padding: 14px;
       }
       .cover-speaker-image {
-        width: 74px;
-        height: 74px;
+        width: 58px;
+        height: 58px;
       }
       .cover-speaker-line {
-        height: 78px;
+        height: 58px;
       }
     }
   </style>
@@ -446,7 +445,7 @@
   <div class="deck">
     <section class="slide active cover-slide">
       <div class="cover-inner">
-        <div class="cover-kicker">Ventura Marketing Training</div>
+        <div class="cover-kicker">MBC Agency Training</div>
         <div class="cover-brand">Ventura Marketing</div>
         <p class="cover-support">YouTube content strategy, repurposing systems, Meta ads after Andromeda, and practical modern growth thinking.</p>
         <div class="presented-by">Presented By</div>
@@ -457,24 +456,19 @@
             <div>
               <div class="cover-speaker-name">Shawn Vierra</div>
               <div class="cover-speaker-role">Founder & CEO, Ventura Marketing Collective</div>
-              <div class="cover-speaker-copy">Founder of Ventura Marketing Collective and the authority-first operator behind the brand’s positioning, philosophy, and premium market presence.</div>
             </div>
           </div>
           <div class="cover-speaker-card">
-            <div style="width:92px;height:92px;border-radius:999px;border:2px solid rgba(52,211,153,0.22);display:grid;place-items:center;background:rgba(255,255,255,0.03);box-shadow:0 0 28px rgba(52,211,153,0.14);font-family:'Newsreader',serif;font-style:italic;font-size:34px;color:#34D399;">S</div>
+            <div style="width:64px;height:64px;border-radius:999px;border:2px solid rgba(52,211,153,0.22);display:grid;place-items:center;background:rgba(255,255,255,0.03);box-shadow:0 0 28px rgba(52,211,153,0.14);font-family:'Newsreader',serif;font-style:italic;font-size:26px;color:#34D399;">S</div>
             <div class="cover-speaker-line"></div>
             <div>
               <div class="cover-speaker-name">Shayan Samimi</div>
               <div class="cover-speaker-role">MBC Marketing Alum · Training Lead</div>
-              <div class="cover-speaker-copy">Leading this session on YouTube content systems, repurposing, Meta ads after Andromeda, and practical AI-driven execution for modern agencies.</div>
             </div>
           </div>
         </div>
       </div>
-      <div class="meta">
-        <div>Ventura Marketing</div>
-        <div class="progress"></div>
-      </div>
+      <div class="meta"><div>Ventura Marketing</div><div class="progress"></div></div>
     </section>
 
     <section class="slide profile-slide">
