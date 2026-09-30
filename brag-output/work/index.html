@@ -1,0 +1,303 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Ventura Marketing — brag</title>
+<link rel="stylesheet" href="fonts/local.css">
+<style>
+  :root {
+    --bg: #000000; --text: #f8fafc; --muted: #a1a1aa;
+    --accent: #a5ffd6; --accent-2: #7cf0c0; --accent-3: #d8fff0;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { width: 1920px; height: 1080px; overflow: hidden; background: #000; }
+  body { font-family: 'Geist', system-ui, sans-serif; color: var(--text); -webkit-font-smoothing: antialiased; }
+  #stage { position: absolute; inset: 0; overflow: hidden;
+    background: linear-gradient(180deg, #020617 0%, #000 40%, #000 100%); }
+  .blob { position: absolute; border-radius: 999px; filter: blur(120px); will-change: transform; }
+  #b1 { width: 900px; height: 900px; background: radial-gradient(circle, rgba(52,211,153,0.55) 0%, rgba(5,191,171,0.2) 40%, transparent 72%); }
+  #b2 { width: 800px; height: 800px; background: radial-gradient(circle, rgba(5,191,171,0.45) 0%, rgba(52,211,153,0.12) 40%, transparent 72%); }
+  #bloom { width: 1100px; height: 700px; left: 410px; top: 190px; background: radial-gradient(ellipse, rgba(52,211,153,0.5) 0%, rgba(74,220,208,0.18) 40%, transparent 72%); }
+  #grid { position: absolute; inset: 0; opacity: .5;
+    background-image: linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
+    background-size: 80px 80px; mask-image: radial-gradient(ellipse at 50% 45%, #000 20%, transparent 70%); -webkit-mask-image: radial-gradient(ellipse at 50% 45%, #000 20%, transparent 70%); }
+  .scene { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+  .serif { font-family: 'Newsreader', serif; font-style: italic; }
+  .brand { font-family: 'Newsreader', serif; font-style: italic; letter-spacing: -0.05em; line-height: 1.02; padding: 0 20px 14px;
+    background: linear-gradient(180deg, #ffffff 0%, #ffffff 58%, #a5ffd6 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .highlight { background: linear-gradient(135deg, var(--accent), var(--accent-3)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .kicker { color: var(--accent); text-transform: uppercase; letter-spacing: 0.28em; font-weight: 600; }
+  .eyebrow { color: var(--accent); text-transform: uppercase; letter-spacing: 0.24em; font-size: 20px; font-weight: 600; }
+
+  /* S1 */
+  #s1line { position: relative; font-size: 128px; font-weight: 500; letter-spacing: -0.04em; white-space: nowrap; }
+  #s1line .serif { font-weight: 400; letter-spacing: -0.03em; }
+  #strike { position: absolute; height: 10px; border-radius: 10px; background: linear-gradient(90deg, var(--accent), var(--accent-2)); box-shadow: 0 0 30px rgba(165,255,214,.6); transform-origin: left center; top: 58%; }
+  .caret { display: inline-block; width: 0; height: 0; position: relative; }
+  .caret::after { content: ""; position: absolute; left: 4px; top: -96px; width: 6px; height: 112px; background: var(--accent); border-radius: 3px; opacity: var(--co, 1); }
+  #s1b { position: absolute; font-size: 190px; letter-spacing: -0.05em; padding: 0 30px 30px; white-space: nowrap; }
+
+  /* S2 */
+  #s2brand { font-size: 210px; }
+  #s2tag { font-size: 44px; color: var(--muted); letter-spacing: -0.01em; margin-top: 10px; }
+  #s2tag span { display: inline-block; }
+  #s2tag .em { color: var(--text); font-weight: 500; }
+  #s2kick { font-size: 22px; margin-top: 44px; }
+
+  /* S3 */
+  #s3 h2 { font-family: 'Newsreader', serif; font-style: italic; font-weight: 400; font-size: 104px; letter-spacing: -0.04em; line-height: 1; margin-top: 18px; }
+  #pipe { position: relative; width: 1720px; height: 230px; margin-top: 90px; }
+  .node { position: absolute; top: 0; z-index: 2; width: 296px; height: 230px; padding: 30px 28px; border-radius: 26px; text-align: left;
+    border: 1px solid rgba(255,255,255,0.1); background: linear-gradient(180deg, rgba(24,24,27,0.72), rgba(9,9,11,0.82));
+    box-shadow: 0 30px 80px rgba(0,0,0,0.45); display: flex; flex-direction: column; justify-content: space-between; }
+  .node .num { font-size: 18px; color: #71717a; letter-spacing: 0.2em; font-weight: 600; display: flex; align-items: center; gap: 14px; }
+  .node .dot { width: 14px; height: 14px; border-radius: 99px; background: var(--accent); box-shadow: 0 0 16px rgba(165,255,214,.7); }
+  .node .t { font-size: 36px; line-height: 1.12; font-weight: 500; letter-spacing: -0.02em; color: #f4f4f5; }
+  .wire { position: absolute; top: 114px; height: 2px; background: rgba(255,255,255,0.14); transform-origin: left center; }
+  .wire i { position: absolute; inset: 0; background: linear-gradient(90deg, var(--accent-2), var(--accent)); transform-origin: left center; box-shadow: 0 0 12px rgba(165,255,214,.8); }
+  #pulse { position: absolute; z-index: 1; top: 105px; width: 20px; height: 20px; margin-left: -10px; border-radius: 99px; background: #eafff5; box-shadow: 0 0 20px 6px rgba(165,255,214,.9), 0 0 60px 20px rgba(52,211,153,.5); }
+  #s3cap { margin-top: 64px; font-size: 30px; color: var(--muted); letter-spacing: 0.01em; }
+  #s3cap b { color: var(--text); font-weight: 500; }
+
+  /* S4 — the deck's own slide card */
+  #s4head { position: absolute; top: 88px; left: 0; right: 0; }
+  .slide { position: absolute; left: 50%; top: 56%; width: 1240px; height: 640px; margin-left: -620px; margin-top: -320px; padding: 64px 72px;
+    border-radius: 36px; border: 1px solid rgba(255,255,255,0.1); background: linear-gradient(180deg, #151517, #09090b);
+    box-shadow: 0 40px 100px rgba(0,0,0,0.6); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+  .slide h2 { font-family: 'Newsreader', serif; font-style: italic; font-weight: 400; font-size: 96px; line-height: 0.98; letter-spacing: -0.04em; max-width: 1000px; margin-top: 8px; }
+  .slide .bullet { margin-top: 44px; display: flex; gap: 18px; align-items: flex-start; padding: 22px 28px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); text-align: left; font-size: 28px; color: #d4d4d8; line-height: 1.4; max-width: 900px; }
+  .slide .bullet .d { width: 12px; height: 12px; border-radius: 99px; background: var(--accent); margin-top: 13px; flex: 0 0 auto; box-shadow: 0 0 16px rgba(165,255,214,.7); }
+  .slide .foot { position: absolute; bottom: 30px; right: 44px; font-size: 16px; color: #52525b; letter-spacing: 0.2em; text-transform: uppercase; }
+
+  /* S5 */
+  #s5brand { font-size: 176px; }
+  #s5line { font-size: 42px; color: var(--muted); margin-top: 4px; }
+  #s5line b { color: var(--text); font-weight: 500; }
+  #speakers { display: flex; gap: 28px; margin-top: 56px; }
+  .spk { display: grid; grid-template-columns: 88px 5px auto; gap: 20px; align-items: center; padding: 20px 34px 20px 22px; border-radius: 28px; text-align: left;
+    border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.035); }
+  .spk img, .spk .mono { width: 88px; height: 88px; border-radius: 999px; object-fit: cover; border: 2px solid rgba(165,255,214,0.28); box-shadow: 0 0 28px rgba(165,255,214,0.18); }
+  .spk .mono { display: grid; place-items: center; font-family: 'Newsreader', serif; font-style: italic; font-size: 38px; color: var(--accent); background: radial-gradient(circle at 30% 30%, rgba(52,211,153,.25), rgba(9,9,11,1)); }
+  .spk .ln { width: 5px; height: 88px; border-radius: 99px; background: linear-gradient(180deg, rgba(165,255,214,1), rgba(165,255,214,0)); }
+  .spk .n { font-family: 'Newsreader', serif; font-style: italic; font-size: 40px; line-height: 1; margin-bottom: 8px; }
+  .spk .r { color: #8b8b94; font-size: 20px; }
+  #cta { margin-top: 56px; display: inline-flex; align-items: center; gap: 16px; padding: 22px 44px; border-radius: 999px; font-size: 36px; font-weight: 600; letter-spacing: -0.01em;
+    color: #02140d; background: linear-gradient(135deg, #a5ffd6, #7cf0c0); box-shadow: 0 0 60px rgba(165,255,214,.35); }
+  #cta .arr { font-weight: 400; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="blob" id="b1"></div><div class="blob" id="b2"></div><div class="blob" id="bloom"></div>
+  <div id="grid"></div>
+
+  <div class="scene" id="s1">
+    <div id="s1line"><span id="s1text"></span><div id="strike"></div></div>
+    <div id="s1b" class="serif highlight">A growth partner.</div>
+  </div>
+
+  <div class="scene" id="s2">
+    <div id="s2brand" class="brand">Ventura Marketing</div>
+    <div id="s2tag"><span>Your marketing.</span>&nbsp;<span class="em">Built,</span>&nbsp;<span class="em">run</span>&nbsp;<span class="em">&amp; optimized</span>&nbsp;<span>for growth.</span></div>
+    <div id="s2kick" class="kicker">All on autopilot</div>
+  </div>
+
+  <div class="scene" id="s3">
+    <div class="eyebrow" id="s3eye">The growth engine</div>
+    <h2 id="s3h">We build <span class="highlight">the entire engine.</span></h2>
+    <div id="pipe"></div>
+    <div id="s3cap">Sharp strategy · <b>high-converting creative</b> · AI-powered execution</div>
+  </div>
+
+  <div class="scene" id="s4">
+    <div id="s4head" class="eyebrow">From our MBC Agency Training</div>
+    <div class="slide" id="c1"><div class="eyebrow">YouTube Strategy</div><h2>Long-form is the <span class="highlight">real asset.</span></h2>
+      <div class="bullet"><div class="d"></div>It creates a content engine we can slice into multiple assets</div><div class="foot">Slide 3</div></div>
+    <div class="slide" id="c2"><div class="eyebrow">Meta Ads Post-Andromeda</div><h2>Broad targeting. <span class="highlight">Better creative.</span></h2>
+      <div class="bullet"><div class="d"></div>Strong creative is the lever that matters most</div><div class="foot">Slide 5</div></div>
+    <div class="slide" id="c3"><div class="eyebrow">AI Agents</div><h2>Digital workers for <span class="highlight">modern agencies.</span></h2>
+      <div class="bullet"><div class="d"></div>The real advantage is speed, consistency, and leverage across the team</div><div class="foot">Slide 7</div></div>
+  </div>
+
+  <div class="scene" id="s5">
+    <div id="s5brand" class="brand">Ventura Marketing</div>
+    <div id="s5line">Connect, automate, and <b>scale.</b></div>
+    <div id="speakers">
+      <div class="spk" id="k1"><div class="mono">SV</div><div class="ln"></div><div><div class="n">Shawn Vierra</div><div class="r">Founder &amp; CEO</div></div></div>
+      <div class="spk" id="k2"><img src="shayan-samimi-headshot.jpg"><div class="ln"></div><div><div class="n">Shayan Samimi</div><div class="r">COO</div></div></div>
+    </div>
+    <div id="cta">venturamc.com <span class="arr">→</span></div>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const P = (t, a, b) => clamp((t - a) / (b - a));
+const oCubic = x => 1 - Math.pow(1 - x, 3);
+const oExpo = x => x >= 1 ? 1 : 1 - Math.pow(2, -10 * x);
+const ioCubic = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+const oBack = x => { const c1 = 1.4, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); };
+const lerp = (a, b, x) => a + (b - a) * x;
+
+// enter (rise + unblur) and exit (lift + blur) for any element
+function io(el, t, tin, tout, { dy = 40, dur = 0.5, outDur = 0.3, blur = 12, scale = 0 } = {}) {
+  const a = oExpo(P(t, tin, tin + dur));
+  const b = tout == null ? 0 : ioCubic(P(t, tout, tout + outDur));
+  const op = a * (1 - b);
+  const y = (1 - a) * dy - b * dy * 0.6;
+  const s = 1 + (1 - a) * scale;
+  el.style.opacity = op;
+  el.style.transform = `translateY(${y}px) scale(${s})`;
+  el.style.filter = `blur(${(1 - a) * blur + b * blur}px)`;
+  return op;
+}
+
+// build pipeline nodes from the site's own engine list
+const ENGINE = ['Buyer-psychology messaging', 'In-house content', 'Performance ads', 'Conversion pages', 'Follow-up systems'];
+const NODE_X = i => i * 356;
+const pipe = $('pipe');
+ENGINE.forEach((t, i) => {
+  const n = document.createElement('div');
+  n.className = 'node'; n.id = 'n' + i; n.style.left = NODE_X(i) + 'px';
+  n.innerHTML = `<div class="num"><div class="dot"></div>0${i + 1}</div><div class="t">${t}</div>`;
+  pipe.appendChild(n);
+  if (i < ENGINE.length - 1) {
+    const w = document.createElement('div');
+    w.className = 'wire'; w.id = 'w' + i; w.style.left = (NODE_X(i) + 296) + 'px'; w.style.width = '60px';
+    w.innerHTML = '<i></i>'; pipe.appendChild(w);
+  }
+});
+const pulse = document.createElement('div'); pulse.id = 'pulse'; pipe.appendChild(pulse);
+
+const S1_TEXT = 'Not another agency.';
+const CARD_T = [7.75, 8.0, 8.25, 8.5, 8.75];
+
+function render(t) {
+  // ambient background — slow drift, pure function of t
+  $('b1').style.transform = `translate(${-260 + Math.sin(t * 0.35) * 120}px, ${-300 + Math.cos(t * 0.27) * 80}px)`;
+  $('b2').style.transform = `translate(${1360 + Math.cos(t * 0.3) * 120}px, ${-260 + Math.sin(t * 0.22) * 90}px)`;
+  const bloom = 0.25 + 0.55 * oExpo(P(t, 3.0, 3.8)) * (1 - 0.5 * P(t, 5, 7)) + 0.45 * oExpo(P(t, 17, 17.8));
+  $('bloom').style.opacity = bloom * (0.9 + 0.1 * Math.sin(t * 4));
+  $('bloom').style.transform = `scale(${0.85 + bloom * 0.3})`;
+  $('grid').style.transform = `translateY(${-t * 8}px)`;
+
+  // ---- S1 hook: 0–3
+  const s1 = $('s1'); s1.style.display = t < 3.1 ? 'flex' : 'none';
+  if (t < 3.1) {
+    const n = Math.round(lerp(0, S1_TEXT.length, P(t, 0.1, 0.8)));
+    const typed = S1_TEXT.slice(0, n);
+    const cut = 'Not another '.length;
+    // lay out the full line up front so centering never shifts while typing
+    const hid = s => `<span style="opacity:0">${s}</span>`;
+    const a = S1_TEXT.slice(0, cut), b = S1_TEXT.slice(cut);
+    const na = Math.min(n, cut), nb = Math.max(0, n - cut);
+    const co = t < 0.95 ? (t < 0.85 || Math.floor(t * 8) % 2 === 0 ? 1 : 0) : 0;
+    const car = `<span class="caret" style="--co:${co}"></span>`;
+    $('s1text').innerHTML = a.slice(0, na) + (n <= cut ? car : '') + hid(a.slice(na)) +
+      `<span class="serif highlight" id="ag">${b.slice(0, nb)}${n > cut ? car : ''}${hid(b.slice(nb))}</span>`;
+    const ag = document.getElementById('ag');
+    const st = $('strike');
+    if (ag) {
+      st.style.left = (ag.offsetLeft - 10) + 'px'; st.style.width = (ag.offsetWidth + 20) + 'px';
+    }
+    st.style.transform = `scaleX(${oCubic(P(t, 1.0, 1.25))})`;
+    const line = $('s1line');
+    const o = ioCubic(P(t, 1.45, 1.75));
+    line.style.opacity = 1 - o;
+    line.style.transform = `translateY(${-o * 60}px) scale(${1 - o * 0.06})`;
+    line.style.filter = `blur(${o * 14}px)`;
+    io($('s1b'), t, 1.62, 2.85, { dy: 70, dur: 0.55, outDur: 0.25, blur: 18, scale: 0.08 });
+  }
+
+  // ---- S2 reveal: 3–7
+  const s2 = $('s2'); s2.style.display = t >= 2.95 && t < 7.1 ? 'flex' : 'none';
+  if (t >= 2.95 && t < 7.1) {
+    const bo = io($('s2brand'), t, 3.05, 6.7, { dy: 80, dur: 0.7, blur: 20, scale: 0.06 });
+    $('s2brand').style.letterSpacing = `${lerp(0.02, -0.05, oExpo(P(t, 3.05, 3.9)))}em`;
+    const spans = $('s2tag').children;
+    [3.6, 3.75, 3.9, 4.05, 4.2].forEach((ts, i) => io(spans[i], t, ts, 6.75, { dy: 26, dur: 0.45, blur: 8 }));
+    io($('s2kick'), t, 4.75, 6.8, { dy: 20, dur: 0.5, blur: 6 });
+    $('s2kick').style.letterSpacing = `${lerp(0.6, 0.28, oExpo(P(t, 4.75, 5.4)))}em`;
+    const drift = P(t, 3, 7);
+    s2.style.transform = `scale(${1 + drift * 0.03})`;
+  }
+
+  // ---- S3 engine: 7–12
+  const s3 = $('s3'); s3.style.display = t >= 6.95 && t < 12.1 ? 'flex' : 'none';
+  if (t >= 6.95 && t < 12.1) {
+    io($('s3eye'), t, 7.05, 11.7, { dy: 20, dur: 0.4, blur: 6 });
+    io($('s3h'), t, 7.1, 11.72, { dy: 40, dur: 0.55, blur: 12 });
+    const PULSE_A = 9.5, PULSE_B = 11.0;
+    const span = NODE_X(4) + 296;
+    const px = lerp(0, span, ioCubic(P(t, PULSE_A, PULSE_B)));
+    ENGINE.forEach((_, i) => {
+      const n = $('n' + i);
+      const a = oBack(P(t, CARD_T[i], CARD_T[i] + 0.45));
+      const out = ioCubic(P(t, 11.72 + i * 0.03, 11.98 + i * 0.03));
+      n.style.opacity = clamp(P(t, CARD_T[i], CARD_T[i] + 0.2)) * (1 - out);
+      n.style.transform = `translateY(${(1 - a) * 60 - out * 30}px) scale(${0.9 + 0.1 * a})`;
+      n.style.filter = `blur(${out * 10}px)`;
+      // light up as the pulse passes through
+      const cx = NODE_X(i) + 148;
+      const lit = t >= PULSE_A ? clamp(1 - Math.abs(px - cx) / 260) : 0;
+      const after = t >= PULSE_A && px > cx ? 0.45 : 0;
+      const g = Math.max(lit, after);
+      n.style.borderColor = `rgba(165,255,214,${0.1 + g * 0.55})`;
+      n.style.boxShadow = `0 30px 80px rgba(0,0,0,0.45), 0 0 ${60 * g}px rgba(52,211,153,${0.35 * g})`;
+      if (i < 4) {
+        const w = $('w' + i);
+        w.style.opacity = P(t, CARD_T[i + 1], CARD_T[i + 1] + 0.2) * (1 - out);
+        const wx0 = NODE_X(i) + 296, wx1 = wx0 + 60;
+        w.firstChild.style.transform = `scaleX(${t >= PULSE_A ? clamp((px - wx0) / (wx1 - wx0)) : 0})`;
+      }
+    });
+    const pv = t >= PULSE_A - 0.1 && t < PULSE_B + 0.35 ? 1 - P(t, PULSE_B, PULSE_B + 0.35) : 0;
+    pulse.style.opacity = pv * P(t, PULSE_A - 0.1, PULSE_A + 0.05);
+    pulse.style.left = px + 'px';
+    io($('s3cap'), t, 10.6, 11.68, { dy: 20, dur: 0.5, blur: 6 });
+  }
+
+  // ---- S4 the real deck: 12–17
+  const s4 = $('s4'); s4.style.display = t >= 11.95 && t < 17.1 ? 'block' : 'none';
+  if (t >= 11.95 && t < 17.1) {
+    io($('s4head'), t, 12.05, 16.7, { dy: 16, dur: 0.4, blur: 6 });
+    const T = [12.15, 13.65, 15.15];
+    const exit = ioCubic(P(t, 16.7, 17.0));
+    T.forEach((ts, i) => {
+      const c = $('c' + (i + 1));
+      const a = oExpo(P(t, ts, ts + 0.6));
+      // pushed back by each later card
+      let back = 0;
+      for (let j = i + 1; j < T.length; j++) back += ioCubic(P(t, T[j], T[j] + 0.6));
+      const y = (1 - a) * 700 - back * 70 - exit * 40;
+      const rot = (1 - a) * (i % 2 ? -6 : 6);
+      const s = (1 - back * 0.07) * (1 - exit * 0.04);
+      c.style.transform = `translateY(${y}px) rotate(${rot}deg) scale(${s})`;
+      c.style.opacity = clamp(a * 3) * (1 - back * 0.45) * (1 - exit);
+      c.style.filter = `blur(${back * 3 + exit * 10}px)`;
+      c.style.zIndex = 10 + i;
+    });
+  }
+
+  // ---- S5 outro: 17–22
+  const s5 = $('s5'); s5.style.display = t >= 16.95 ? 'flex' : 'none';
+  if (t >= 16.95) {
+    io($('s5brand'), t, 17.05, null, { dy: 70, dur: 0.7, blur: 18, scale: 0.05 });
+    io($('s5line'), t, 17.55, null, { dy: 24, dur: 0.5, blur: 8 });
+    io($('k1'), t, 18.0, null, { dy: 40, dur: 0.55, blur: 8 });
+    io($('k2'), t, 18.2, null, { dy: 40, dur: 0.55, blur: 8 });
+    const c = oBack(P(t, 19.0, 19.45));
+    const cta = $('cta');
+    cta.style.opacity = clamp(P(t, 19.0, 19.15));
+    cta.style.transform = `scale(${0.7 + 0.3 * c})`;
+    const glow = 0.35 + 0.25 * Math.exp(-(t - 19.1) * 3) * (t > 19 ? 1 : 0) + 0.08 * Math.sin(t * 3);
+    cta.style.boxShadow = `0 0 ${60 + glow * 60}px rgba(165,255,214,${glow})`;
+  }
+}
+window.render = render;
+window.DURATION = 22;
+render(0);
+</script>
+</body>
+</html>
