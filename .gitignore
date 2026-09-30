@@ -1,2 +1,6 @@
 video/claude-video/
 video/watch-run/
+video/build/node_modules/
+video/scratch/
+video/ref/all/
+video/critic/work-*/

@@ -1,0 +1,546 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Shayan Samimi — Growth Partner</title>
+<style>
+@font-face{font-family:Geist;src:url(assets/fonts/Geist-Regular.woff2) format('woff2');font-weight:400}
+@font-face{font-family:Geist;src:url(assets/fonts/Geist-Medium.woff2) format('woff2');font-weight:500}
+@font-face{font-family:Geist;src:url(assets/fonts/Geist-SemiBold.woff2) format('woff2');font-weight:600}
+@font-face{font-family:Geist;src:url(assets/fonts/Geist-Bold.woff2) format('woff2');font-weight:700}
+@font-face{font-family:Newsreader;src:url(assets/fonts/newsreader-latin-400-italic.woff2) format('woff2');font-style:italic;font-weight:400}
+:root{
+  --navy:#020617; --light:#f2f3f8; --ink:#0b0b19; --mint:#a5ffd6; --mint2:#7cf0c0; --deep:#12b886; --muted:#5b6070;
+}
+html,body{margin:0;padding:0;background:var(--navy);overflow:hidden}
+#frame{position:relative;overflow:hidden;background:var(--navy)}
+#bg{position:absolute;inset:0}
+#stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;margin:-540px 0 0 -960px;transform-origin:50% 50%}
+.abs{position:absolute;left:0;top:0;will-change:transform}
+.txt{font-family:Geist,sans-serif;white-space:pre;line-height:1}
+.guide{position:absolute;border:0 dashed rgba(255,255,255,.38)}
+.gv{width:0;height:6000px;top:-2500px;border-left-width:1.5px}
+.gh{height:0;width:9000px;left:-3500px;border-top-width:1.5px}
+.lbl{position:absolute;font:500 15px Geist,sans-serif;white-space:nowrap}
+#caret{width:6px;background:var(--mint);border-radius:1px}
+#sil,#silHead{width:900px;transform-origin:0 0;max-width:none}
+#eyeSvg{position:absolute;left:0;top:0;overflow:visible}
+</style>
+</head>
+<body>
+<div id="frame">
+  <div id="bg"></div>
+  <div id="stage">
+    <!-- scene A/B: design canvas -->
+    <div id="guides" class="abs">
+      <div id="gL" class="guide gv"></div><div id="gR" class="guide gv"></div>
+      <div id="gT" class="guide gh"></div><div id="gB" class="guide gh"></div>
+      <div id="lW" class="lbl"></div><div id="lH" class="lbl"></div>
+    </div>
+    <div id="hello" class="abs"></div>
+    <canvas id="hand" class="abs" width="260" height="260"></canvas>
+    <!-- silhouette -->
+    <img id="sil" class="abs" src="assets/shayan-silhouette.png"><img id="silHead" class="abs" src="assets/shayan-silhouette.png">
+    <div id="im" class="abs txt" style="font-weight:600;color:#fff;font-size:190px">I’m</div>
+    <div id="name" class="abs txt"></div>
+    <div id="your" class="abs"></div>
+    <div id="dotRing" class="abs"></div>
+    <div id="dot" class="abs"></div>
+    <!-- eye -->
+    <svg id="eyeSvg" width="1920" height="1080" viewBox="0 0 1920 1080">
+      <defs>
+        <radialGradient id="irisG" cx="50%" cy="50%" r="50%">
+          <stop offset="0" stop-color="#0c5f4a"/>
+          <stop offset=".42" stop-color="#11946f"/>
+          <stop offset=".7" stop-color="#2cc995"/>
+          <stop offset="1" stop-color="#52dcaa"/>
+        </radialGradient>
+        <clipPath id="eyeClip"><path id="eyeClipPath"/></clipPath>
+        <clipPath id="irisClip"><circle id="irisClipC" r="10"/></clipPath>
+      </defs>
+      <path id="eyeWhite" fill="#f2f3f8"/>
+      <g clip-path="url(#eyeClip)">
+        <g id="irisGhosts"></g>
+        <g id="iris">
+          <circle id="irisBase" r="100" fill="url(#irisG)"/>
+          <g id="irisTex" opacity="0"></g>
+          <circle id="irisInner" r="60" fill="#0b5a46" opacity="0"/>
+          <circle id="irisRim" r="100" fill="none" stroke="#08493a" stroke-width="7"/>
+          
+          <path id="pupil" fill="#0b0b19"/>
+          <ellipse id="glint" rx="30" ry="30" fill="#fff"/>
+        </g>
+        <clipPath id="leftOfSlit"><rect id="losR" x="-3000" y="-2000" width="3000" height="5000"/></clipPath>
+        <text id="gText" clip-path="url(#leftOfSlit)" font-family="Geist" font-weight="400" font-size="150" fill="#fff">Growth</text>
+      </g>
+    </svg>
+    <div id="growthEye" class="abs txt" style="font-weight:400;font-size:150px;color:#fff">Growth</div>
+    <!-- titles -->
+    <div id="titles" class="abs">
+      <div id="tPre" class="abs txt" style="font-weight:400">Growth</div>
+      <div id="tWord" class="abs txt" style="font-weight:600"></div>
+      <svg id="squig" class="abs" width="600" height="40" style="overflow:visible"><path id="squigP" fill="none" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div id="icon" class="abs"></div>
+    </div>
+    <div id="final" class="abs" style="text-align:center"></div>
+    <div id="logo" class="abs" style="font-family:Newsreader,serif;font-style:italic;font-size:96px;letter-spacing:-.03em;line-height:1.15;padding:0 .08em .1em;white-space:nowrap;background:linear-gradient(180deg,#fff 0%,#fff 55%,#a5ffd6 100%);-webkit-background-clip:text;background-clip:text;color:transparent">Ventura Marketing</div>
+  </div>
+</div>
+<script src="vendor/gsap.min.js"></script>
+<script>
+(async function(){
+const Q = new URLSearchParams(location.search);
+const VERT = Q.get('v') === '1';
+const FW = VERT ? 1080 : 1920, FH = VERT ? 1920 : 1080, SCALE = 1;
+const frame = document.getElementById('frame');
+frame.style.width = FW + 'px'; frame.style.height = FH + 'px';
+document.getElementById('stage').style.transform = `scale(${SCALE})`;
+const DUR = 11.21;
+const $ = id => document.getElementById(id);
+await Promise.all(['400 100px Geist','500 100px Geist','600 100px Geist','700 100px Geist','italic 400 100px Newsreader'].map(f=>document.fonts.load(f)));
+await new Promise(r=>{const i=$('sil'); if(i.complete) r(); else i.onload=r;});
+
+// ---------- helpers ----------
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const lerp=(a,b,p)=>a+(b-a)*p;
+const EZ={}; const ez=n=>EZ[n]||(EZ[n]=gsap.parseEase(n));
+const P=(t,a,b,e='none')=>ez(e)(clamp((t-a)/(b-a)));          // eased progress
+// keyframes: [[t,v],[t,v,ease],...]
+function kf(t,k){ if(t<=k[0][0]) return k[0][1];
+  for(let i=1;i<k.length;i++){ if(t<=k[i][0]){ const p=ez(k[i][2]||'power2.inOut')((t-k[i-1][0])/(k[i][0]-k[i-1][0])); return lerp(k[i-1][1],k[i][1],p);} }
+  return k[k.length-1][1]; }
+const on=(el,v)=>{el.style.display=v?'':'none'};
+const tf=(el,x,y,s=1,extra='')=>{el.style.transform=`translate(${x}px,${y}px) scale(${s}) ${extra}`};
+const cv=document.createElement('canvas').getContext('2d');
+const mw=(s,w,px,fam='Geist')=>{cv.font=`${w} ${px}px ${fam}`;return cv.measureText(s).width};
+const CAP=0.71, ASC=0.93;   // Geist cap-height / ascent ratios (line-height 1 box)
+const hash=i=>{let x=Math.sin(i*127.1+311.7)*43758.5453;return x-Math.floor(x)};
+
+// ---------- dot-matrix waving hand (drawn once, deterministic) ----------
+const handDots=(()=>{const c=document.createElement('canvas');c.width=c.height=64;const g=c.getContext('2d');g.fillStyle='#000';
+  const rr=(x,y,w,h,a)=>{g.save();g.translate(x,y);g.rotate(a);g.beginPath();g.roundRect(-w/2,-h,w,h,w/2);g.fill();g.restore();};
+  g.beginPath();g.roundRect(17,28,28,26,8);g.fill();                // palm
+  rr(21,32,8,22,-0.16);rr(28,31,8,27,-0.05);rr(35,31,8,26,0.05);rr(42,33,7,21,0.16); // fingers
+  rr(46,48,8,17,1.0);                                               // thumb
+  const d=g.getImageData(0,0,64,64).data,out=[];
+  for(let y=0;y<64;y+=2)for(let x=0;x<64;x+=2){if(d[(y*64+x)*4+3]>100)out.push([x,y,hash(x*97+y)]);}
+  return out;})();
+function drawHand(p,col){const c=$('hand'),g=c.getContext('2d');g.clearRect(0,0,260,260);g.fillStyle=col;
+  for(const [x,y,h] of handDots){ if(h<p) g.fillRect(x*3.6+14,y*3.6+14,5.4,5.4);} }
+
+// ---------- icons for title carousel ----------
+const ICONS={
+ dot:`<svg width="44" height="44" viewBox="0 0 44 44"><circle cx="22" cy="22" r="16" fill="#12b886"/></svg>`,
+ play:`<svg width="56" height="44" viewBox="0 0 56 44"><rect x="3" y="3" width="50" height="38" rx="10" fill="#12b886"/><path d="M23 14 L36 22 L23 30Z" fill="#f2f3f8"/></svg>`,
+ gear:`<svg width="48" height="48" viewBox="0 0 48 48"><g fill="#12b886" transform="translate(24 24)">${[0,45,90,135,180,225,270,315].map(a=>`<rect x="-4.5" y="-21" width="9" height="10" rx="2" transform="rotate(${a})"/>`).join('')}<circle r="14"/></g><circle cx="24" cy="24" r="5.5" fill="#f2f3f8"/></svg>`,
+ target:`<svg width="48" height="48" viewBox="0 0 48 48"><circle cx="24" cy="24" r="20" fill="#12b886"/><circle cx="24" cy="24" r="13" fill="#f2f3f8"/><circle cx="24" cy="24" r="7" fill="#12b886"/></svg>`,
+ spark:`<svg width="48" height="48" viewBox="0 0 48 48"><path d="M24 2 C26 17 31 22 46 24 C31 26 26 31 24 46 C22 31 17 26 2 24 C17 22 22 17 24 2Z" fill="#12b886"/></svg>`,
+ link:`<svg width="60" height="44" viewBox="0 0 60 44"><circle cx="22" cy="22" r="14" fill="none" stroke="#12b886" stroke-width="7"/><circle cx="38" cy="22" r="14" fill="none" stroke="#0b0b19" stroke-width="7"/></svg>`
+};
+
+// ---------- scene A/B: "Hello" on a design canvas ----------
+const HELLO='Hello';
+const helloEl=$('hello');
+helloEl.innerHTML=[...HELLO].map((c,i)=>`<span class="abs txt" id="hg${i}" style="font-weight:700;color:var(--deep)">${c}</span><span class="abs txt" id="hl${i}" style="font-weight:700">${c}</span>`).join('');
+const helloT=[0,0.600,0.733,0.867,0.967];   // letter arrival times (light scene); H exists from 0
+
+function renderHello(t){
+  const dark=t<0.467;
+  // font size: grows through the dark beat, keeps growing as letters land
+  const fs=kf(t,[[0,70],[0.2,205,'expo.out'],[0.46,236,'power1.out'],[0.47,236],[1.0,262,'power2.out'],[1.067,265]]);
+  let n=1; for(let i=1;i<5;i++) if(t>=helloT[i]) n=i+1;
+  const s=HELLO.slice(0,n);
+  // partial width of the arriving letter (it slides in from the left edge of its slot)
+  const w=mw(s,700,fs);
+  const cx=kf(t,[[0,905],[0.47,905],[1.0,960,'power2.out']]);
+  const base=kf(t,[[0,610],[0.47,612],[1.0,650,'power2.out']]);
+  const left=cx-w/2;
+  helloEl.style.display='';
+  for(let i=0;i<5;i++){
+    const L=$('hl'+i),G=$('hg'+i);
+    if(i>=n){on(L,0);on(G,0);continue;}
+    on(L,1);
+    const x=left+mw(HELLO.slice(0,i),700,fs);
+    const at=i===0?(dark?0:0.467):helloT[i];
+    const p=P(t,at,at+0.13,'power3.out');
+    L.style.fontSize=G.style.fontSize=fs+'px';
+    L.style.color=dark?'#fff':'var(--ink)';
+    const y=base-fs*ASC;
+    tf(L,x-(1-p)*fs*0.10,y);
+    // mint/deep ghost that trails behind each letter as it lands
+    const gp=P(t,at,at+0.30,'power1.out');
+    on(G,gp<1); G.style.color=dark?'var(--mint)':'var(--deep)';
+    G.style.opacity=(1-gp)*0.9;
+    tf(G,x-(1-p)*fs*0.10-fs*0.11*(1-gp),y);
+  }
+  // guides hug the glyph box
+  const top=base-fs*CAP, right=left+w;
+  const pad=t<0.2?0:0;
+  const grow=P(t,0,0.2,'expo.out');
+  const gx0=lerp(cx-4,left,grow), gx1=lerp(cx+4,right,grow), gy0=lerp(base-20,top,grow);
+  $('guides').style.display='';
+  const gc=dark?'rgba(255,255,255,.34)':'rgba(11,11,25,.28)';
+  for(const g of ['gL','gR','gT','gB']) $(g).style.borderColor=gc;
+  tf($('gL'),gx0-pad,0); tf($('gR'),gx1+pad,0); tf($('gT'),0,gy0); tf($('gB'),0,base);
+  const lc=dark?'rgba(255,255,255,.72)':'rgba(11,11,25,.62)';
+  $('lW').textContent=Math.round(gx1-gx0)+'px'; $('lH').textContent=Math.round(base-gy0)+'px';
+  $('lW').style.color=$('lH').style.color=lc; $('lW').style.opacity=$('lH').style.opacity=P(t,0.12,0.2);
+  tf($('lW'),(gx0+gx1)/2-22,gy0-26); tf($('lH'),gx0-62,(gy0+base)/2-9);
+  // caret before the H exists
+  const car=$('caret');
+  // hand: dither in at 0.60, wave on the beat
+  const hp=P(t,0.58,0.70);
+  if(!dark && hp>0){ on($('hand'),1); drawHand(hp,'#34343f');
+    const ang=Math.sin((t-0.60)*Math.PI*2*1.87)*12*P(t,0.6,0.7);
+    tf($('hand'),right-40,top-205,1,`rotate(${ang}deg)`); $('hand').style.transformOrigin='50% 85%';
+  } else on($('hand'),0);
+}
+
+// ---------- silhouette / name / Your ----------
+const SIL_W=900, HEAD_CX=0.5189;  // head centre column in the image
+function silState(t){
+  // returns {x,y,w,rx,blur} in stage px; x = head centre, y = hair top
+  const big=VERT?{x:960,y:250,w:1060}:{x:805,y:118,w:900}, small=VERT?{x:960,y:556,w:640}:{x:960,y:546,w:420};
+  const p=P(t,1.53,1.80,'power3.inOut');
+  let x=lerp(big.x,small.x,p), y=lerp(big.y,small.y,p), w=lerp(big.w,small.w,p);
+  let rx=kf(t,[[1.50,0],[1.72,-42,'power3.inOut'],[1.86,-34,'sine.out']]);  // bow forward, settle tilted
+  let blur=Math.sin(Math.PI*clamp((t-1.53)/0.27))*3.5;
+  // slow push while "I'm" holds
+  if(t<1.53){ const s=1+0.035*P(t,1.067,1.53,'none'); w*=s; x-=0; y-=10*P(t,1.067,1.53); }
+  // settle breathing while the name types
+  if(t>1.8&&t<3.73){ y+=kf(t,[[1.8,0],[2.13,-10,'sine.inOut'],[2.4,-2,'sine.inOut'],[2.67,-9,'sine.inOut'],[3.2,0,'sine.inOut'],[3.47,-8,'sine.inOut'],[3.73,0,'sine.inOut']]); }
+  // 3.73–3.90: head lifts and pushes toward camera with blur
+  if(t>=3.73){ const q=P(t,3.73,3.90,'power2.in'); w*=1+0.55*q; y+=lerp(0,-70,q)+q*40; rx=lerp(-24,0,q); blur=q*9; }
+  return {x,y,w,rx,blur};
+}
+function renderSil(t){
+  const el=$('sil'), hd=$('silHead');
+  if(t<1.067||t>=3.9){on(el,0);on(hd,0);return;} on(el,1); on(hd,1);
+  const s=silState(t);
+  const EW=s.w*1401/1001, sc=EW/1401;     // image was widened (shoulders extended); keep head scale
+  const neck=575*sc, EH=3786*sc;           // neck line (image px 575) is the bow pivot
+  const left=s.x-EW*HEAD_CX;
+  for(const e of [el,hd]){ e.style.width=EW+'px'; e.style.filter=s.blur>0.3?`blur(${s.blur}px)`:'none'; }
+  el.style.clipPath=`inset(${neck-2}px 0 0 0)`;
+  el.style.transform=`translate(${left}px,${s.y}px)`;
+  hd.style.clipPath=`inset(0 0 ${EH-neck-1}px 0)`;
+  hd.style.transformOrigin=`${EW*HEAD_CX}px ${neck}px`;
+  const fwd=-s.rx*2.2*sc;                  // head drops forward a little as it tips
+  hd.style.transform=`translate(${left}px,${s.y+fwd}px) perspective(${1400*sc}px) rotateX(${s.rx}deg)`;
+}
+
+// "I'm" inside the head, then deleted by the caret
+function renderIm(t){
+  const el=$('im'); if(t<1.067||t>=1.64){on(el,0);return;} on(el,1);
+  const str=t<1.50?'I’m':(t<1.60?'I’':'I');
+  el.textContent=str;
+  const fs=190, full=mw('I’m',600,fs);
+  const s=silState(t); const B=VERT?{x:960,y:250}:{x:805,y:118};
+  const x=B.x-full/2+(s.x-B.x), base=500+(VERT?132:0); const dy=s.y-B.y;
+  el.style.filter=s.blur>0.3?`blur(${s.blur*0.8}px)`:'none';
+  tf(el,x,base-fs*ASC+dy*0.9);
+  el.style.opacity=t<1.53?1:1-P(t,1.53,1.64);
+}
+
+const FIRST='Shayan', LAST='Samimi', NAME_FS=72, NAME_BASE=478;
+const nameW=()=>mw(FIRST+' ',400,NAME_FS)+mw(LAST,600,NAME_FS);
+function typedName(t){
+  // typing 1.66 → 2.00 (13 chars), delete Samimi 2.53→2.58, Shayan 2.58→2.64
+  const full=FIRST+' '+LAST, N=full.length;
+  if(t<1.66) return '';
+  if(t<2.53) return full.slice(0,Math.min(N,1+Math.floor((t-1.66)/0.026)));
+  return full;
+}
+function renderName(t){
+  const el=$('name');
+  if(t<1.66||t>=2.66){on(el,0);on($('caret'),0);return;}
+  on(el,1);
+  const s=typedName(t);
+  const a=s.slice(0,Math.min(s.length,FIRST.length+1)), b=s.length>FIRST.length+1?s.slice(FIRST.length+1):'';
+  const W=nameW(), left=960-W/2;
+  const hop=kf(t,[[2.40,0],[2.47,-26,'power2.out'],[2.53,-34,'power1.out']]);
+  const fadeLast=1-P(t,2.49,2.56);
+  const fadeFirst=1-P(t,2.57,2.64);
+  el.innerHTML=`<span class="abs txt" style="font-size:${NAME_FS}px;font-weight:400;color:var(--ink);opacity:${fadeFirst};transform:translate(0,0)">${a}</span>`+
+    `<span class="abs txt" style="font-size:${NAME_FS}px;font-weight:600;color:var(--ink);opacity:${fadeLast};transform:translate(${mw(FIRST+' ',400,NAME_FS)}px,${hop}px)">${b}</span>`;
+  tf(el,left,NAME_BASE-NAME_FS*ASC);
+  // caret follows the typed text; blinks on the beat while holding
+  const tw=mw(a,400,NAME_FS)+(b?mw(b,600,NAME_FS):0);
+  const car=$('caret'); const blink=(t>2.0&&t<2.53)?(Math.floor((t-2.0)/0.267)%2===0):true;
+  on(car,blink&&t<2.60); car.style.height=NAME_FS*0.86+'px'; car.style.width='4px'; car.style.background='var(--deep)';
+  tf(car,left+(t<2.53?tw:mw(FIRST,400,NAME_FS))+5,NAME_BASE-NAME_FS*0.78);
+}
+// caret for the "I'm" beat
+function renderImCaret(t){
+  if(t<1.40||t>=1.66) return false;
+  const car=$('caret'); on(car,1); car.style.background='var(--mint)';
+  const fs=190, full=mw('I’m',600,fs), x0=(VERT?960:805)-full/2;
+  const str=t<1.50?'':(t<1.60?'I’':'I');
+  const w=t<1.50?0:mw(str,600,fs);
+  car.style.width='9px'; car.style.height=fs*0.74+'px';
+  const s=silState(t); const dy=s.y-(VERT?250:118);
+  tf(car,x0+w-(t<1.5?12:-4),500+(VERT?132:0)-fs*0.74+dy*0.9);
+  return true;
+}
+
+// "Your": the last "i" of Samimi → its dot grows into "o" → letters gather → o becomes the pupil
+const Y_FS=150, Y_BASE=512;
+function renderYour(t){
+  const el=$('your');
+  if(t<2.62||t>=3.9){on(el,0);on($('dot'),0);on($('dotRing'),0);return;}
+  on(el,1);
+  const full='Your', W=mw(full,400,Y_FS), left=960-W/2;
+  const xs=[0,1,2,3].map(i=>left+mw(full.slice(0,i),400,Y_FS));
+  const oW=mw('o',400,Y_FS), oCx=xs[1]+oW/2, oCy=Y_BASE-Y_FS*0.26;
+  let html='';
+  // 2.62–2.80: an "i" (stem + dot) — the stem drops away, the dot swells into the o
+  if(t<2.82){
+    const iX=kf(t,[[2.62,1010],[2.80,oCx,'power3.inOut']]);
+    const sz=kf(t,[[2.62,60],[2.72,110,'back.out(2)'],[2.80,Y_FS]]);
+    const stemDrop=P(t,2.66,2.78,'power2.in');
+    const dotR=kf(t,[[2.62,5],[2.70,9],[2.80,oW*0.43,'power2.inOut']]);
+    const baseY=kf(t,[[2.62,NAME_BASE],[2.80,Y_BASE,'power3.inOut']]);
+    html+=`<div class="abs" style="left:${iX-sz*0.06}px;top:${baseY-sz*0.52+stemDrop*60}px;width:${sz*0.12}px;height:${sz*0.52}px;background:var(--ink);opacity:${1-stemDrop};border-radius:2px"></div>`;
+    // ghost
+    const gp=P(t,2.68,2.82);
+    html+=`<div class="abs" style="left:${iX-dotR-dotR*0.35*(1-gp)}px;top:${baseY-sz*0.72-dotR}px;width:${dotR*2}px;height:${dotR*2}px;border-radius:50%;background:var(--deep);opacity:${0.8*(1-gp)*P(t,2.66,2.7)}"></div>`;
+    // the dot → ring (becomes the o)
+    const ringP=P(t,2.72,2.80);
+    const cy=lerp(baseY-sz*0.72, oCy-40, P(t,2.62,2.80,'power2.inOut'));
+    html+=`<div class="abs" style="left:${iX-dotR}px;top:${cy-dotR}px;width:${dotR*2}px;height:${dotR*2}px;border-radius:50%;box-sizing:border-box;border:${lerp(dotR,Y_FS*0.085,ringP)}px solid var(--ink)"></div>`;
+  } else {
+    // letters: o sits raised then drops; Y, u, r fly in small then settle (2.93–3.10)
+    const oLift=kf(t,[[2.82,-40],[3.00,-44],[3.27,0,'bounce.out']]);
+    const lp=[0,2,3].map((i,k)=>P(t,2.90+k*0.02,3.10+k*0.02,'back.out(1.6)'));
+    const from=[[-120,30],[90,40],[160,20]];
+    const rOut=P(t,3.58,3.70,'power2.in');
+    const close=P(t,3.62,3.75,'power3.inOut');
+    const yGrey=P(t,3.75,3.88);
+    const L=(ch,i,k,extra='')=>{const p=lp[k]; const sc=lerp(0.4,1,p);
+      let x=xs[i]+from[k][0]*(1-p), y=Y_BASE-Y_FS*ASC+from[k][1]*(1-p);
+      if(ch==='Y') x+=close*22 - yGrey*30; if(ch==='u') x-=close*mw('r',400,Y_FS)*0.0 - close*6;
+      return `<span class="abs txt" style="font-size:${Y_FS}px;color:${ch==='Y'?`rgba(11,11,25,${1-yGrey*0.6})`:'var(--ink)'};transform:translate(${x}px,${y}px) scale(${ch==='Y'?sc*(1-yGrey*0.45):sc});transform-origin:50% 80%;${extra}">${ch}</span>`;};
+    html+=L('Y',0,0)+L('u',2,1);
+    if(rOut<1) html+=L('r',3,2,`opacity:${1-rOut};filter:blur(${rOut*6}px)`);
+    // the o: ring → mint fill (3.13–3.30) → ink fill = pupil (3.40)
+    const ringW=Y_FS*0.085;
+    const fillMint=P(t,3.13,3.30,'power2.out'), fillInk=P(t,3.38,3.46,'power2.out');
+    const r0=oW*0.43;
+    // 3.75–3.90: pupil rises + swells toward the eye handoff
+    const sw=P(t,3.74,3.90,'power3.in');
+    const look=kf(t,[[3.46,0],[3.52,-9,'power3.out'],[3.58,-9],[3.64,7,'power3.inOut'],[3.72,0,'power2.inOut']]);
+    const R=lerp(r0,95,sw), cx=lerp(oCx+look, 960, sw), cy=lerp(oCy+oLift,330,sw);
+    // mint ring appears behind the pupil (offset down), grows with it
+    const ringVis=P(t,3.66,3.78);
+    const rr=R*1.12;
+    $('dotRing').innerHTML=`<div class="abs" style="left:${cx-rr}px;top:${cy-rr+R*0.55}px;width:${rr*2}px;height:${rr*2}px;border-radius:50%;background:var(--deep);opacity:${ringVis}"></div>`;
+    on($('dotRing'),ringVis>0);
+    const inner=fillInk>0?`background:var(--ink)`:`background:radial-gradient(circle,var(--deep) ${fillMint*100}%,transparent ${fillMint*100+0.5}%)`;
+    $('dot').innerHTML=`<div class="abs" style="left:${cx-R}px;top:${cy-R*(1+sw*0.12)}px;width:${R*2}px;height:${R*2*(1+sw*0.12)}px;border-radius:50%;box-sizing:border-box;border:${lerp(ringW,0,fillInk)}px solid var(--ink);${inner}"></div>`;
+    on($('dot'),1);
+  }
+  el.innerHTML=html;
+  if(t<2.82){on($('dot'),0);on($('dotRing'),0);}
+}
+
+// ---------- eye ----------
+function eyePath(cx,cy,a,hu,hl){
+  // almond from two cubic arcs; hu/hl = lid heights above/below the corner line
+  const k=0.55;
+  return `M${cx-a},${cy} C${cx-a*k},${cy-hu*1.33} ${cx+a*k},${cy-hu*1.33} ${cx+a},${cy} C${cx+a*k},${cy+hl*1.33} ${cx-a*k},${cy+hl*1.33} ${cx-a},${cy}Z`;
+}
+function pupilPath(cx,cy,r,slit){
+  // slit 0 = circle, 1 = vertical cat slit
+  const w=r*lerp(1,0.24,slit), h=r*lerp(1,1.12,slit), k=lerp(0.55,0.62,slit), pt=lerp(0.55,0.08,slit);
+  return `M${cx},${cy-h} C${cx+w*pt},${cy-h} ${cx+w},${cy-h*k} ${cx+w},${cy} C${cx+w},${cy+h*k} ${cx+w*pt},${cy+h} ${cx},${cy+h} C${cx-w*pt},${cy+h} ${cx-w},${cy+h*k} ${cx-w},${cy} C${cx-w},${cy-h*k} ${cx-w*pt},${cy-h} ${cx},${cy-h}Z`;
+}
+// iris texture (rays), deterministic
+$('irisTex').innerHTML=Array.from({length:84},(_,i)=>{const a=i/84*Math.PI*2+hash(i)*0.05, r0=0.45+hash(i+9)*0.1, r1=0.86+hash(i+3)*0.1;
+  return `<line x1="${Math.cos(a)*r0*100}" y1="${Math.sin(a)*r0*100}" x2="${Math.cos(a)*r1*100}" y2="${Math.sin(a)*r1*100}" stroke="#063d30" stroke-opacity="${0.35+hash(i+1)*0.4}" stroke-width="${0.6+hash(i+5)*0.9}"/>`}).join('');
+
+function renderEye(t){
+  const svg=$('eyeSvg');
+  if(t<3.9||t>=5.367){on(svg,0);on($('growthEye'),0);return;}
+  on(svg,1);
+  // lids: half-dome (flat lower lid) → almond
+  const cx=kf(t,[[3.9,960],[5.367,960]]);
+  const cy=kf(t,[[3.9,760],[3.99,497,'expo.out'],[4.47,470,'sine.inOut'],[4.69,478,'power3.inOut'],[5.2,478]]);
+  const a =kf(t,[[3.9,860],[3.99,730,'expo.out'],[4.47,720],[4.69,735,'power3.inOut'],[5.2,745]]);
+  const hu=kf(t,[[3.9,780],[3.99,470,'expo.out'],[4.47,440],[4.69,455,'power3.inOut'],[5.2,462]]);
+  const hl=kf(t,[[3.9,160],[3.99,18,'expo.out'],[4.37,22],[4.69,430,'power3.inOut'],[5.2,445]]);
+  // push-in (5.18 → 5.367): scale the whole eye group around the text anchor
+  const zoom=kf(t,[[4.69,1],[5.2,1.06,'sine.inOut'],[5.367,4.0,'power3.in']]);
+  const zx=960, zy=520;
+  const Z=(x,y)=>[zx+(x-zx)*zoom, zy+(y-zy)*zoom];
+  const [ecx,ecy]=Z(cx,cy);
+  const d=eyePath(ecx,ecy,a*zoom,hu*zoom,hl*zoom);
+  $('eyeWhite').setAttribute('d',d); $('eyeClipPath').setAttribute('d',d);
+  // iris position/size
+  const IXT=VERT?1045:1100;
+  const ix=kf(t,[[3.9,960],[3.99,930,'expo.out'],[4.47,930],[4.67,IXT-5,'power4.inOut'],[4.77,IXT,'power2.out'],[5.2,IXT+6]]);
+  const iy=kf(t,[[3.9,330],[3.99,210,'expo.out'],[4.47,225],[4.67,505,'power4.inOut'],[4.77,500,'power2.out'],[5.2,500]]);
+  const ir=kf(t,[[3.9,112],[3.99,205,'expo.out'],[4.30,190],[4.47,215,'back.out'],[4.67,300,'power3.inOut'],[5.2,302]]);
+  const iz=Math.min(zoom,1.25), out=P(t,5.27,5.33,'power2.in');
+  const IX=zx+(ix-zx)*iz+out*260, IY=zy+(iy-zy)*iz; const IR=ir*iz;
+  const irisClose=1;
+  const g=$('iris'); g.setAttribute('transform',`translate(${IX},${IY})`); g.setAttribute('opacity',1-out);
+  const sc=IR/100;
+  $('irisBase').setAttribute('r',IR); $('irisRim').setAttribute('r',IR-3.5);
+  $('irisRim').setAttribute('stroke-width',kf(t,[[3.9,IR*0.0],[4.25,0],[4.35,7]]));
+  $('irisTex').setAttribute('transform',`scale(${sc})`); $('irisTex').setAttribute('opacity',P(t,4.25,4.40));
+  $('irisInner').setAttribute('r',IR*0.52); $('irisInner').setAttribute('opacity',0.55*P(t,4.25,4.40));
+  // pupil: round (fills most of the iris) → slit
+  const slit=P(t,4.22,4.42,'power2.inOut');
+  const pr=IR*lerp(0.82,0.9,slit)*(t<4.22?1:1);
+  $('pupil').setAttribute('d',pupilPath(0,0,pr*lerp(1,1,0),slit));
+  // glint top-right
+  const gr=IR*kf(t,[[3.9,0.2],[4.47,0.2],[4.67,0.13]]);
+  $('glint').setAttribute('cx',IR*0.42); $('glint').setAttribute('cy',-IR*0.66); $('glint').setAttribute('rx',gr*1.2); $('glint').setAttribute('ry',gr*0.9);
+  // motion blur on the dart (4.40–4.62)
+  const mb=Math.sin(Math.PI*P(t,4.47,4.71))*8;
+  g.style.filter=mb>0.4?`blur(${mb}px)`:'none';
+  // flat afterimages trailing the dart (4.53–4.73)
+  let gh='';
+  for(const [t0,x,y,r] of [[4.53,985,300,250],[4.63,1060,440,290]]){
+    const o=0.9*(P(t,t0,t0+0.03))*(1-P(t,t0+0.06,t0+0.17));
+    if(o>0.01){const [X,Y]=Z(x,y); gh+=`<circle cx="${X}" cy="${Y}" r="${r*zoom}" fill="#2cc995" opacity="${o}"/>`;}
+  }
+  $('irisGhosts').innerHTML=gh;
+  // "Growth" walks out of the pupil slit (4.85 → 5.24), white over the iris; as the iris slides away it turns ink
+  const W=mw('Growth',400,150), gT=$('gText'), ge=$('growthEye');
+  const slitL=IX-0.2*IR;                                   // left edge of the slit (world px)
+  const reveal=P(t,4.85,5.26,'power2.out');
+  const tIX=zx+(IXT-zx)*Math.min(kf(5.27,[[4.69,1],[5.2,1.06,'sine.inOut'],[5.367,4.0,'power3.in']]),1.25);
+  const restX=tIX-0.2*302*1.06-W-8;                         // where the word rests once fully out
+  const wx=t<5.27 ? slitL-8-W*reveal : restX;
+  const wy=IY+150*CAP/2;
+  const ink=P(t,5.28,5.33);
+  if(t>=4.85&&t<5.33){
+    gT.style.display=''; gT.setAttribute('x',wx); gT.setAttribute('y',wy);
+    gT.setAttribute('fill',`rgb(${lerp(255,11,ink)},${lerp(255,11,ink)},${lerp(255,25,ink)})`);
+    $('losR').setAttribute('x', (t<5.27?slitL-8:Math.max(slitL-8,restX+W+4)) - 3000);
+  } else gT.style.display='none';
+  if(t>=5.33){
+    on(ge,1);
+    const land=P(t,5.33,5.367,'power2.inOut');
+    const tx=lerp(wx,960-W/2,land), ty=lerp(wy-150*ASC,TITLE_START_Y,land);
+    ge.style.color='var(--ink)'; ge.style.clipPath='none';
+    tf(ge,tx,ty);
+  } else on(ge,0);
+}
+
+// ---------- titles ----------
+const TITLES=[[5.45,'Strategist','play'],[6.067,'Operator','gear'],[6.60,'Marketer','target'],[6.933,'Architect','spark'],[7.267,'Partner','link']];
+const T_FS=100, T_BASE=580, TITLE_START_Y=580-150*ASC;
+function renderTitles(t){
+  const box=$('titles');
+  if(t<5.367||t>=7.83){on(box,0);return;}
+  on(box,1);
+  let idx=-1; for(let i=0;i<TITLES.length;i++) if(t>=TITLES[i][0]) idx=i;
+  // prefix size: 150 → 100 as the first bold word arrives
+  const sp=P(t,5.45,5.56,'power3.out');
+  const pfs=lerp(150,T_FS,sp);
+  const preW=mw('Growth',400,pfs), gap=mw(' ',400,pfs)*1.15;
+  const word=idx>=0?TITLES[idx][1]:'';
+  const wW=word?mw(word,600,T_FS):0;
+  // keep the group centred; eases to the new centre after each swap
+  const groupW=k=> mw('Growth',400,T_FS)+mw(' ',400,T_FS)*1.15+mw(TITLES[k][1],600,T_FS);
+  let left;
+  if(idx<0) left=960-preW/2;
+  else{ const prevL= idx>0?960-groupW(idx-1)/2:960-mw('Growth',400,150)/2; const nowL=960-groupW(idx)/2;
+        left=lerp(prevL,nowL,P(t,TITLES[idx][0],TITLES[idx][0]+0.16,'power3.out')); }
+  // entrance blur on the very first frames (5.367–5.43)
+  const inBlur=(1-P(t,5.367,5.43))*5;
+  const pre=$('tPre'); pre.style.fontSize=pfs+'px'; pre.style.color='var(--ink)';
+  pre.style.filter=inBlur>0.2?`blur(${inBlur}px)`:'none';
+  // collapse into the name (7.60 → 7.83)
+  const col=P(t,7.60,7.80,'power3.in');
+  const colS=lerp(1,0.62,col);
+  box.style.transformOrigin='960px 545px'; box.style.transform=`scale(${colS})`; box.style.opacity=1-P(t,7.765,7.80);
+  tf(pre,left,T_BASE-pfs*ASC);
+  const wEl=$('tWord');
+  if(idx>=0){
+    on(wEl,1); wEl.textContent=word; wEl.style.fontSize=T_FS+'px';
+    const t0=TITLES[idx][0], ep=P(t,t0,t0+0.10,'power3.out');
+    const bl=(1-ep)*(idx===0?7:4);
+    wEl.style.filter=bl>0.2?`blur(${bl}px)`:'none';
+    wEl.style.opacity=lerp(idx===0?0:0.35,1,ep);
+    tf(wEl,left+preW+gap+(1-ep)*(idx===0?60:16),T_BASE-T_FS*ASC+(1-ep)*(idx===0?0:-8));
+    // icon riding the last letter; dot first, then the role icon from 6.067
+    const ic=$('icon'); const which=(idx===0 && t<5.98)?'dot':TITLES[idx][2];
+    if(ic.dataset.k!==which){ic.innerHTML=ICONS[which]; ic.dataset.k=which;}
+    const ip=P(t,5.60,5.70,'back.out(3)');
+    const hopT=idx===0?5.60:t0, hop=Math.sin(Math.PI*P(t,hopT,hopT+0.14))*-14;
+    const isz=ICONS[which].match(/width="(\d+)"/)[1]*1;
+    const ix=left+preW+gap+wW-isz*0.55, iy=T_BASE-T_FS*CAP-34+hop;
+    on(ic,ip>0); ic.style.transformOrigin='0 100%'; tf(ic,ix+6,iy-10,(idx===0&&t<5.7?ip:1)*1.45);
+  } else { on(wEl,0); on($('icon'),0); }
+  // squiggle under "Growth": draws 5.60→6.00 (accent), goes ink, then turns accent and unwinds 7.33→7.60
+  const sq=$('squigP');
+  const W=mw('Growth',400,T_FS), per=18, amp=5;
+  let d=`M0,10`; for(let x=per/2;x<=W+0.1;x+=per/2){ d+=` L${x},${(x/(per/2))%2?10-amp:10+amp}`; }
+  sq.setAttribute('d',d);
+  const len=W*1.35;
+  const draw=P(t,5.60,6.00,'power1.inOut'), unwind=P(t,7.33,7.60,'power2.in');
+  sq.style.strokeDasharray=len; sq.style.strokeDashoffset=len*(1-draw)+len*unwind*-1;
+  const inkMix=P(t,5.85,6.05)*(1-P(t,7.30,7.36));
+  sq.setAttribute('stroke', inkMix>0.5?'#0b0b19':'#12b886');
+  on($('squig'),draw>0);
+  tf($('squig'),left,T_BASE+12);
+}
+
+// ---------- final name + brand ----------
+function renderFinal(t){
+  const el=$('final');
+  if(t<7.74||t>=9.567){on(el,0);return;}
+  on(el,1);
+  const fs=84, SUB=VERT?40:32;
+  const W=mw(FIRST+' ',400,fs)+mw(LAST,600,fs);
+  el.innerHTML=`<div class="abs txt" style="font-size:${fs}px;color:var(--ink);transform:translate(${960-W/2}px,${545-fs*ASC}px)"><span style="font-weight:400">${FIRST} </span><span style="font-weight:600">${LAST}</span></div>`+
+    (VERT
+      ? ['GROWTH PARTNER','VENTURA MARKETING'].map((l,k)=>`<div class="abs txt" style="font-size:${SUB}px;font-weight:500;letter-spacing:.12em;color:var(--muted);opacity:${P(t,8.0+k*0.08,8.3+k*0.08)};transform:translate(${960-mw(l,500,SUB)*1.12/2}px,${604+k*SUB*1.35+(1-P(t,8.0+k*0.08,8.3+k*0.08,'power3.out'))*10}px)">${l}</div>`).join('')
+      : `<div class="abs txt" style="font-size:${SUB}px;font-weight:500;letter-spacing:.14em;color:var(--muted);opacity:${P(t,8.0,8.3)};transform:translate(${960-mw('GROWTH PARTNER · VENTURA MARKETING',500,SUB)*1.14/2}px,${600+(1-P(t,8.0,8.3,'power3.out'))*10}px)">GROWTH PARTNER · VENTURA MARKETING</div>`);
+  const s=kf(t,[[7.74,1.18],[7.86,1,'power3.out'],[9.567,0.8,'none']]);
+  el.style.transformOrigin='960px 545px'; el.style.transform=`scale(${s})`;
+  el.style.opacity=P(t,7.77,7.80);
+}
+function renderLogo(t){
+  const el=$('logo');
+  if(t<9.567||t>=10.767){on(el,0);return;}
+  on(el,1);
+  const w=mw('Ventura Marketing',400,96,'Newsreader')*0.97+0.16*96;
+  const s=kf(t,[[9.567,1],[10.767,1.035,'none']]);
+  el.style.transformOrigin='50% 50%';
+  el.style.transform=`translate(${960-w/2}px,${540-62}px) scale(${s})`;
+}
+
+// ---------- master ----------
+function render(t){
+  // slow camera push through the holds (name, Your, titles); resets are hidden by hard cuts
+  const cam = t<1.8?1 : t<3.9 ? kf(t,[[1.8,1],[3.72,1.09,'none']]) : (t<5.367 ? (VERT?kf(t,[[3.9,1.12],[5.26,1.12],[5.33,1,'power2.inOut']]):1) : (t<9.567 ? kf(t,[[5.367,1],[7.6,1.08,'none']]) : 1));
+  $('stage').style.transform=`scale(${SCALE*cam})`;
+  // background
+  const dark = t<0.467 || (t>=3.9&&t<5.367) || t>=9.567;
+  $('bg').style.background = dark?'var(--navy)':'var(--light)';
+  // design canvas only in the first two beats
+  if(t<1.067) renderHello(t); else { on($('hello'),0); on($('guides'),0); on($('hand'),0); }
+  // dark-beat caret: a mint caret births the H (0 → 0.2)
+  const car=$('caret');
+  renderSil(t); renderIm(t); renderYour(t); renderEye(t); renderTitles(t); renderFinal(t); renderLogo(t);
+  if(!renderImCaret(t)) renderName(t);
+  if(t<0.2){ on(car,1); car.style.background='var(--mint)'; car.style.width='5px'; car.style.height='120px'; tf(car,860,480); car.style.opacity=1-P(t,0.1,0.2); }
+  else car.style.opacity=1;
+}
+// caret element lives on top
+const c=document.createElement('div'); c.id='caret'; c.className='abs'; $('stage').appendChild(c);
+
+const tl=gsap.timeline({paused:true,onUpdate:()=>render(tl.time())});
+tl.to({},{duration:DUR});
+window.__DUR=DUR; window.__FW=FW; window.__FH=FH;
+window.__seek=t=>{tl.seek(t,false); render(t);};
+window.__seek(Number(Q.get('t')||0));
+window.__ready=true;
+})();
+</script>
+</body>
+</html>
