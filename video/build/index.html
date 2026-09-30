@@ -40,7 +40,7 @@ html,body{margin:0;padding:0;background:var(--navy);overflow:hidden}
     <div id="hello" class="abs"></div>
     <canvas id="hand" class="abs" width="260" height="260"></canvas>
     <!-- silhouette -->
-    <img id="sil" class="abs" src="assets/shayan-silhouette.png"><img id="silHead" class="abs" src="assets/shayan-silhouette.png">
+    <img id="sil" class="abs" src="assets/shayan-profile-body.png"><img id="silHead" class="abs" src="assets/shayan-profile-head.png">
     <div id="im" class="abs txt" style="font-weight:600;color:#fff;font-size:190px">I’m</div>
     <div id="name" class="abs txt"></div>
     <div id="your" class="abs"></div>
@@ -98,7 +98,7 @@ document.getElementById('stage').style.transform = `scale(${SCALE})`;
 const DUR = 11.21;
 const $ = id => document.getElementById(id);
 await Promise.all(['400 100px Geist','500 100px Geist','600 100px Geist','700 100px Geist','italic 400 100px Newsreader'].map(f=>document.fonts.load(f)));
-await new Promise(r=>{const i=$('sil'); if(i.complete) r(); else i.onload=r;});
+await Promise.all(['sil','silHead'].map(id=>new Promise(r=>{const i=$(id); if(i.complete) r(); else i.onload=r;})));
 
 // ---------- helpers ----------
 const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
@@ -197,48 +197,44 @@ function renderHello(t){
 }
 
 // ---------- silhouette / name / Your ----------
-const SIL_W=900, HEAD_CX=0.5189;  // head centre column in the image
+// profile silhouette (from Shayan's side-profile photo): image-space measurements
+const IMG={w:1855,h:3467,hairTop:71,headH:360,cx:924.5,pivotX:1060,pivotY:420};
 function silState(t){
-  // returns {x,y,w,rx,blur} in stage px; x = head centre, y = hair top
-  const big=VERT?{x:960,y:250,w:1060}:{x:805,y:118,w:900}, small=VERT?{x:960,y:556,w:640}:{x:960,y:546,w:420};
+  // returns {x,y,hh,bow,blur} in stage px; x = head centre, y = hair top, hh = head height
+  const big=VERT?{x:960,y:230,hh:640}:{x:800,y:96,hh:560}, small=VERT?{x:960,y:556,hh:290}:{x:960,y:546,hh:190};
   const p=P(t,1.53,1.80,'power3.inOut');
-  let x=lerp(big.x,small.x,p), y=lerp(big.y,small.y,p), w=lerp(big.w,small.w,p);
-  let rx=kf(t,[[1.50,0],[1.72,-42,'power3.inOut'],[1.86,-34,'sine.out']]);  // bow forward, settle tilted
+  let x=lerp(big.x,small.x,p), y=lerp(big.y,small.y,p), hh=lerp(big.hh,small.hh,p);
+  let bow=kf(t,[[1.50,0],[1.72,-25,'power3.inOut'],[1.86,-18,'sine.out']]);   // chin drops forward, settles bowed
   let blur=Math.sin(Math.PI*clamp((t-1.53)/0.27))*3.5;
   // slow push while "I'm" holds
-  if(t<1.53){ const s=1+0.035*P(t,1.067,1.53,'none'); w*=s; x-=0; y-=10*P(t,1.067,1.53); }
-  // settle breathing while the name types
+  if(t<1.53){ hh*=1+0.035*P(t,1.067,1.53,'none'); y-=10*P(t,1.067,1.53); }
+  // breathing while the name types
   if(t>1.8&&t<3.73){ y+=kf(t,[[1.8,0],[2.13,-10,'sine.inOut'],[2.4,-2,'sine.inOut'],[2.67,-9,'sine.inOut'],[3.2,0,'sine.inOut'],[3.47,-8,'sine.inOut'],[3.73,0,'sine.inOut']]); }
   // 3.73–3.90: head lifts and pushes toward camera with blur
-  if(t>=3.73){ const q=P(t,3.73,3.90,'power2.in'); w*=1+0.55*q; y+=lerp(0,-70,q)+q*40; rx=lerp(-24,0,q); blur=q*9; }
-  return {x,y,w,rx,blur};
+  if(t>=3.73){ const q=P(t,3.73,3.90,'power2.in'); hh*=1+0.55*q; y+=lerp(0,-70,q)+q*40; bow=lerp(-18,0,q); blur=q*9; }
+  return {x,y,hh,bow,blur};
 }
 function renderSil(t){
   const el=$('sil'), hd=$('silHead');
   if(t<1.067||t>=3.9){on(el,0);on(hd,0);return;} on(el,1); on(hd,1);
   const s=silState(t);
-  const EW=s.w*1401/1001, sc=EW/1401;     // image was widened (shoulders extended); keep head scale
-  const neck=575*sc, EH=3786*sc;           // neck line (image px 575) is the bow pivot
-  const left=s.x-EW*HEAD_CX;
+  const sc=s.hh/IMG.headH, EW=IMG.w*sc, EH=IMG.h*sc;
+  const left=s.x-IMG.cx*sc, top=s.y-IMG.hairTop*sc;
   for(const e of [el,hd]){ e.style.width=EW+'px'; e.style.filter=s.blur>0.3?`blur(${s.blur}px)`:'none'; }
-  el.style.clipPath=`inset(${neck-2}px 0 0 0)`;
-  el.style.transform=`translate(${left}px,${s.y}px)`;
-  hd.style.clipPath=`inset(0 0 ${EH-neck-1}px 0)`;
-  hd.style.transformOrigin=`${EW*HEAD_CX}px ${neck}px`;
-  const fwd=-s.rx*2.2*sc;                  // head drops forward a little as it tips
-  hd.style.transform=`translate(${left}px,${s.y+fwd}px) perspective(${1400*sc}px) rotateX(${s.rx}deg)`;
+  el.style.transform=`translate(${left}px,${top}px)`;
+  hd.style.transformOrigin=`${IMG.pivotX*sc}px ${IMG.pivotY*sc}px`;   // pivot at the back of the neck
+  hd.style.transform=`translate(${left}px,${top}px) rotate(${s.bow}deg)`;
 }
 
 // "I'm" inside the head, then deleted by the caret
+const imPos=t=>{const s=silState(t), fs=190, full=mw('I’m',600,fs); return {x:s.x+s.hh*0.04-full/2, base:s.y+s.hh*0.64, s};};
 function renderIm(t){
   const el=$('im'); if(t<1.067||t>=1.64){on(el,0);return;} on(el,1);
   const str=t<1.50?'I’m':(t<1.60?'I’':'I');
   el.textContent=str;
-  const fs=190, full=mw('I’m',600,fs);
-  const s=silState(t); const B=VERT?{x:960,y:250}:{x:805,y:118};
-  const x=B.x-full/2+(s.x-B.x), base=500+(VERT?132:0); const dy=s.y-B.y;
-  el.style.filter=s.blur>0.3?`blur(${s.blur*0.8}px)`:'none';
-  tf(el,x,base-fs*ASC+dy*0.9);
+  const fs=190, q=imPos(t);
+  el.style.filter=q.s.blur>0.3?`blur(${q.s.blur*0.8}px)`:'none';
+  tf(el,q.x,q.base-fs*ASC);
   el.style.opacity=t<1.53?1:1-P(t,1.53,1.64);
 }
 
@@ -274,12 +270,12 @@ function renderName(t){
 function renderImCaret(t){
   if(t<1.40||t>=1.66) return false;
   const car=$('caret'); on(car,1); car.style.background='var(--mint)';
-  const fs=190, full=mw('I’m',600,fs), x0=(VERT?960:805)-full/2;
+  const fs=190, q=imPos(Math.min(t,1.53)), x0=q.x;
   const str=t<1.50?'':(t<1.60?'I’':'I');
   const w=t<1.50?0:mw(str,600,fs);
   car.style.width='9px'; car.style.height=fs*0.74+'px';
-  const s=silState(t); const dy=s.y-(VERT?250:118);
-  tf(car,x0+w-(t<1.5?12:-4),500+(VERT?132:0)-fs*0.74+dy*0.9);
+  const s=silState(t);
+  tf(car,x0+w-(t<1.5?12:-4),q.base-fs*0.74+(s.y-q.s.y));
   return true;
 }
 
