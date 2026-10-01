@@ -83,7 +83,7 @@ html,body{margin:0;padding:0;background:var(--navy);overflow:hidden}
       <div id="icon" class="abs"></div>
     </div>
     <div id="final" class="abs" style="text-align:center"></div>
-    <div id="logo" class="abs" style="font-family:Newsreader,serif;font-style:italic;font-size:96px;letter-spacing:-.03em;line-height:1.15;padding:0 .08em .1em;white-space:nowrap;background:linear-gradient(180deg,#fff 0%,#fff 55%,#a5ffd6 100%);-webkit-background-clip:text;background-clip:text;color:transparent">Ventura Marketing</div>
+    <div id="logo" class="abs" style="font-family:Newsreader,serif;font-style:italic;font-size:72px;letter-spacing:-.03em;line-height:1.15;padding:0 .08em .1em;white-space:nowrap;background:linear-gradient(180deg,#fff 0%,#fff 55%,#a5ffd6 100%);-webkit-background-clip:text;background-clip:text;color:transparent">Ventura Marketing</div>
   </div>
 </div>
 <script src="vendor/gsap.min.js"></script>
@@ -198,36 +198,41 @@ function renderHello(t){
 
 // ---------- silhouette / name / Your ----------
 // profile silhouette (from Shayan's side-profile photo): image-space measurements
-const IMG={w:1855,h:3467,hairTop:71,headH:360,cx:924.5,pivotX:1060,pivotY:420};
+const IMG={w:1855,h:3467,hairTop:71,headH:360,cx:930.5,pivotX:795,pivotY:420,leanX:930,leanY:1000};   // mirrored: faces right like the reference
 function silState(t){
-  // returns {x,y,hh,bow,blur} in stage px; x = head centre, y = hair top, hh = head height
-  const big=VERT?{x:960,y:230,hh:640}:{x:800,y:96,hh:560}, small=VERT?{x:960,y:556,hh:290}:{x:960,y:546,hh:190};
-  const p=P(t,1.53,1.80,'power3.inOut');
+  // returns {x,y,hh,bow,lean,blur} in stage px; x = head centre, y = hair top, hh = head height
+  const big=VERT?{x:960,y:230,hh:640}:{x:800,y:96,hh:560}, small=VERT?{x:1050,y:500,hh:370}:{x:1110,y:492,hh:262};
+  const p=P(t,1.66,1.75,'power3.inOut');
   let x=lerp(big.x,small.x,p), y=lerp(big.y,small.y,p), hh=lerp(big.hh,small.hh,p);
-  let bow=kf(t,[[1.50,0],[1.72,-25,'power3.inOut'],[1.86,-18,'sine.out']]);   // chin drops forward, settles bowed
-  let blur=Math.sin(Math.PI*clamp((t-1.53)/0.27))*3.5;
+  // the whole bust tips forward as "I'm" is deleted, the chin drops hard, then the head lifts back as the name types
+  let lean=kf(t,[[1.53,0],[1.68,18,'power2.in'],[1.80,11,'power2.out'],[2.0,10,'sine.out']]);
+  let bow=kf(t,[[1.53,0],[1.68,44,'power2.in'],[1.92,26,'back.out(1.3)'],[2.15,22,'sine.inOut'],[2.45,28,'sine.inOut'],[2.62,30,'sine.inOut']]);
+  let blur=Math.sin(Math.PI*clamp((t-1.55)/0.22))*5;
   // slow push while "I'm" holds
   if(t<1.53){ hh*=1+0.035*P(t,1.067,1.53,'none'); y-=10*P(t,1.067,1.53); }
-  // breathing while the name types
-  if(t>1.8&&t<3.73){ y+=kf(t,[[1.8,0],[2.13,-10,'sine.inOut'],[2.4,-2,'sine.inOut'],[2.67,-9,'sine.inOut'],[3.2,0,'sine.inOut'],[3.47,-8,'sine.inOut'],[3.73,0,'sine.inOut']]); }
-  // 3.73–3.90: head lifts and pushes toward camera with blur
-  if(t>=3.73){ const q=P(t,3.73,3.90,'power2.in'); hh*=1+0.55*q; y+=lerp(0,-70,q)+q*40; bow=lerp(-18,0,q); blur=q*9; }
-  return {x,y,hh,bow,blur};
+  // breathing while the name and "Your" hold
+  if(t>1.76&&t<3.62){ y+=kf(t,[[1.76,0],[2.13,-8,'sine.inOut'],[2.67,-4,'sine.inOut'],[3.2,-9,'sine.inOut'],[3.62,0,'sine.inOut']]); }
+  // 3.62–3.90: the head lifts back up and pushes toward camera with blur, following the pupil
+  if(t>=3.72){ const q=P(t,3.72,3.90,'power2.in'); hh*=1+0.3*q; y+=lerp(0,VERT?90:70,q); bow=lerp(30,14,P(t,3.72,3.86,'power2.inOut')); lean=lerp(10,4,q); blur=q*6; }
+  if(t>=3.9){ const q=P(t,3.9,4.05,'power2.out'); hh=lerp(VERT?380:320,VERT?400:340,q); x=VERT?1020:1060; y=lerp(VERT?500:470,VERT?560:530,q); bow=12; lean=2; blur=lerp(4,0,q); }
+  return {x,y,hh,bow,lean,blur};
 }
 function renderSil(t){
   const el=$('sil'), hd=$('silHead');
-  if(t<1.067||t>=3.9){on(el,0);on(hd,0);return;} on(el,1); on(hd,1);
+  if(t<1.067||t>=3.95){on(el,0);on(hd,0);return;} on(el,1); on(hd,1);
+  el.style.zIndex=hd.style.zIndex=t>=3.9?'3':'';   // over the eye in its first frames, as in the reference
   const s=silState(t);
-  const sc=s.hh/IMG.headH, EW=IMG.w*sc, EH=IMG.h*sc;
+  const sc=s.hh/IMG.headH, EW=IMG.w*sc;
   const left=s.x-IMG.cx*sc, top=s.y-IMG.hairTop*sc;
-  for(const e of [el,hd]){ e.style.width=EW+'px'; e.style.filter=s.blur>0.3?`blur(${s.blur}px)`:'none'; }
-  el.style.transform=`translate(${left}px,${top}px)`;
-  hd.style.transformOrigin=`${IMG.pivotX*sc}px ${IMG.pivotY*sc}px`;   // pivot at the back of the neck
-  hd.style.transform=`translate(${left}px,${top}px) rotate(${s.bow}deg)`;
+  const Lx=IMG.leanX*sc, Ly=IMG.leanY*sc, Nx=IMG.pivotX*sc, Ny=IMG.pivotY*sc;
+  const lean=`translate(${left}px,${top}px) translate(${Lx}px,${Ly}px) rotate(${s.lean}deg) translate(${-Lx}px,${-Ly}px)`;
+  for(const e of [el,hd]){ e.style.width=EW+'px'; e.style.filter=s.blur>0.3?`blur(${s.blur}px)`:'none'; e.style.transformOrigin='0 0'; }
+  el.style.transform=lean;
+  hd.style.transform=`${lean} translate(${Nx}px,${Ny}px) rotate(${s.bow}deg) translate(${-Nx}px,${-Ny}px)`;   // bow pivots at the back of the neck
 }
 
 // "I'm" inside the head, then deleted by the caret
-const imPos=t=>{const s=silState(t), fs=190, full=mw('I’m',600,fs); return {x:s.x+s.hh*0.04-full/2, base:s.y+s.hh*0.64, s};};
+const imPos=t=>{const s=silState(t), fs=190, full=mw('I’m',600,fs); return {x:s.x-s.hh*0.08-full/2, base:s.y+s.hh*0.64, s};};
 function renderIm(t){
   const el=$('im'); if(t<1.067||t>=1.64){on(el,0);return;} on(el,1);
   const str=t<1.50?'I’m':(t<1.60?'I’':'I');
@@ -504,10 +509,10 @@ function renderLogo(t){
   const el=$('logo');
   if(t<9.567||t>=10.767){on(el,0);return;}
   on(el,1);
-  const w=mw('Ventura Marketing',400,96,'Newsreader')*0.97+0.16*96;
+  const w=mw('Ventura Marketing',400,72,'Newsreader')*0.97+0.16*72;
   const s=kf(t,[[9.567,1],[10.767,1.035,'none']]);
   el.style.transformOrigin='50% 50%';
-  el.style.transform=`translate(${960-w/2}px,${540-62}px) scale(${s})`;
+  el.style.transform=`translate(${960-w/2}px,${540-46}px) scale(${s})`;
 }
 
 // ---------- master ----------

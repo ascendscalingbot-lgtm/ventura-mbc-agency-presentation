@@ -12,6 +12,8 @@ Every round was reviewed by a fresh critic agent that had not seen the build. Fu
 | 05 verify | r5 | Head over-tucked; mouth read as open; boxy small torso; faint seam | Bow reduced to ~25°; mouth traced from the photo; shoulders sloped | Mouth and bow FIXED in 06 |
 | 06 verify | r6 | Left torso side still a vertical wall; a step under the jaw; seam at ~1/255 | Both shoulders slope; chin-to-throat curve follows the photo; head overlaps the body | Final render (r7). These three fixes were checked on stills by the builder, not by a fresh critic, because of a usage limit |
 
+| 07 verify | r8: silhouette mirrored to face right, bust leans forward, head lifts back | Motion now goes the right way, but the tip was rushed, the bowed figure too small and low, the lift hit "You", a collar flap at the neck | Tip at full size 1.53–1.68 then shrink; bowed figure 30% larger and just under the name; smaller lift that carries into the eye; collar flap removed | All four FIXED in 08 |
+| 08 verify | r9 (final) | Only small differences: a softer bow than the reference, the carried head barely shows on navy in 9:16 | Left as is | **SHIP** |
 ## Quality bar (final render)
 
 | Check | Target | Result |
@@ -19,7 +21,7 @@ Every round was reviewed by a fresh critic agent that had not seen the build. Fu
 | Audio is the reference's | identical | Decoded PCM md5 `c95e6b88…` identical to `source/reel.mp4` in both renders ✅ |
 | Loudness | as the source | −14.1 LUFS, LRA 1.4 LU, TP −0.8 dBFS: the source's own values, untouched ✅ |
 | Cuts on the reference's hits | ±1 frame | 0.48 / 1.08 / 3.90 / 5.33–5.35 / 9.58 ✅ |
-| Frozen time | ≤ reference (3.4 s) | 16:9 **2.5 s**, 9:16 **2.0 s**, all in the sign-off and wordmark holds ✅ |
+| Frozen time | ≤ reference (3.4 s) | 16:9 **2.3 s**, 9:16 **2.0 s**, all in the sign-off and wordmark holds ✅ |
 | Frame one | finished composition | Navy canvas, guides and the mint caret with the "H" ✅ |
 | Text contrast | ≥ 4.5:1 | Name 18.8:1, subline ≈7:1 ✅ |
 | 9:16 text inside the frame | settled text ≥ 58 px margin | ✅ (the only edge touch is 2 transitional frames at 5.47) |

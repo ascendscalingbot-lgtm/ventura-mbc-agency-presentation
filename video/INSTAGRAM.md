@@ -1,44 +1,24 @@
-# Instagram post kit
+# Instagram post
 
 ## Caption
 
-Claude Opus 5.5 built this entire video in code. No editor, no After Effects, no templates. 🎬
+Comment "PROMPT" and I'll send you the exact setup Claude Opus 5.5 used to make this video.
 
-Comment "PROMPT" and I'll DM you the exact resource pack: the prompt, the repos and the workflow I used to make it.
+I gave it a reel I liked and a side profile photo of me, and it rebuilt the whole thing in code. It kept the original song and the timing and swapped in my name.
 
-Here's what it did:
-→ Watched a reel I liked frame by frame
-→ Mapped every cut to the beat of the song
-→ Turned my side-profile photo into the silhouette
-→ Animated the whole thing with GSAP and rendered it at 60fps
-→ Sent each draft to a separate AI "critic" and fixed what it found
+I'm Shayan, COO at Ventura Marketing. Most of my week goes into YouTube and Meta ads for the brands we work with. Lately I've been building a lot of AI workflows like this one. If you want help growing your brand, my DMs are open.
 
-I'm Shayan Samimi, COO at Ventura Marketing. I help brands grow with:
-• YouTube content strategy that builds trust and authority
-• Repurposing engines that turn one long video into weeks of Shorts
-• Meta ads built for the post-Andromeda algorithm
-• AI systems that do real work for your team, not just brainstorm
+#claudeai #aivideo
 
-Not a vendor. A growth partner.
+## DM reply
 
-Want this kind of thinking on your brand? DM me "GROWTH".
+Here you go! You'll need Claude Code and two GitHub repos.
 
-#ClaudeAI #AIvideo #ContentStrategy #MetaAds #GrowthMarketing #VenturaMarketing
+This one lets Claude watch a video frame by frame: https://github.com/bradautomates/claude-video
 
----
+This one has the motion design rules it followed: https://github.com/echris6/motion-video-kit
 
-## DM reply: the resource pack
-
-Hey! Here's the exact pack I used 👇
-
-**1. The two repos**
-- Video watcher (lets Claude "watch" a reel frame by frame): https://github.com/bradautomates/claude-video
-- Motion kit (rules, critic prompts, quality bar): https://github.com/echris6/motion-video-kit
-
-**2. How to run it**
-Open Claude Code, upload the reel you want to recreate plus a photo of yourself (side profile works best), and paste the prompt below. Fill in the brackets first.
-
-**3. The prompt**
+Upload the reel you want to recreate and a photo of yourself (side profile works best), fill in the brackets below, and paste it in. Expect to go back and forth a couple of times. Mine took a few rounds before the silhouette looked like me.
 
 ```
 <role>
@@ -101,4 +81,4 @@ The MP4 in both sizes, a contact sheet, and a short note on what a human should 
 </deliverables>
 ```
 
-Tag me when you post yours 🙌
+Tag me if you post yours.
